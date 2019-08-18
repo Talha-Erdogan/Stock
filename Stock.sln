@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock.Business", "Stock.Bus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock.UI", "Stock.UI\Stock.UI.csproj", "{C1D09790-F06D-4E7B-BBA1-8713053185F9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc-Script", "Doc-Script", "{1BCCFF96-585B-4EF4-968C-AC7ED57C0999}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\talha\OneDrive\Belgeler\script.sql = C:\Users\talha\OneDrive\Belgeler\script.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
