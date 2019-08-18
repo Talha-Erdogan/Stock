@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/Content/Icons/favicon.png">
+    <title>@ViewBag.Title</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Menu CSS -->
+    <link href="~/Content/Css/sidebar-nav.min.css" rel="stylesheet" />
+    <!-- animation CSS -->
+    <link href="~/Content/Css/animate.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="~/Content/Css/style.css" rel="stylesheet" />
+    <!-- color CSS -->
+    <link href="~/Content/Css/blue.css" rel="stylesheet" />
+    <!-- Sweet Alert -->
+    <link href="~/Content/Css/sweetalert2.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="cssload-speeding-wheel"></div>
+    </div>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header">
+                <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="ti-close ti-menu ti-menu"></i></a>
+                <div class="top-left-part">
+                    <a class="logo" href="@Url.Action("Index","Sales")">
+                        <b><img src="~/Content/Icons/eliteadmin-logo.png" alt="home" style="height:60px;width:60px;padding:5px;margin:5px;"/></b>
+                        <span class="hidden-xs">
+                            <div style="height:21px;width:108px;display:inline-block;">
+                                <p style="color:white;text-transform :lowercase;font-family: 'Times New Roman',Times, serif;">s<span style="color:orange;text-transform:uppercase;font-weight:bold;font-size:25px;font-family: 'Times New Roman',Times, serif;">T</span>ock</p>
+                            </div>
+                            @*<img src="~/Content/Icons/eliteadmin-text.png" alt="home" />*@
+                        </span>
+                    </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-left hidden-xs">
+                    <li>
+                        <a href="javascript:void(0)" class="open-close hidden-xs waves-effect waves-light">
+                            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <form role="search" class="app-search hidden-xs">
+                            <input type="text" placeholder="Ara..." class="form-control">
+                            <a href=""><span class="glyphicon glyphicon-search"></span></a>
+                        </form>
+                    </li>
+                </ul>
+                <ul class="nav navbar-top-links navbar-right pull-right">
+                
+                    <!-- /.dropdown -->
+                   
+                    <!-- /.dropdown -->
+
+
+
+
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
+                            <img src="@Request.Cookies["Personal"]["Image"]" alt="user-img" width="36" class="img-circle">
+                            <b class="hidden-xs">@Request.Cookies["Personal"]["Name"]</b>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user animated flipInY">
+                            <li><a href="#"><i class="ti-user"></i> Profile</a></li>
+                            <li><a href="#"><i class="ti-wallet"></i> İstatistiklerim</a></li>
+                            <li><a href="#"><i class="ti-settings"></i> Hesap Ayarları</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="@Url.Action("Logout","Login")"><i class="fa fa-power-off"></i> Logout</a></li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+                </ul>
+            </div>
+            <!-- /.navbar-header -->
+            <!-- /.navbar-top-links -->
+            <!-- /.navbar-static-side -->
+        </nav>
+        <!-- Left navbar-header -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+                <ul class="nav" id="side-menu">
+                    <li class="sidebar-search hidden-sm hidden-md hidden-lg">
+                        <!-- input-group -->
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Ara...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                    </li>
+                    <li class="user-pro">
+                        <a href="#" class="waves-effect">
+                            <img src="@Request.Cookies["Personal"]["Image"]" alt="user-img" class="img-circle">
+                            <span class="hide-menu">
+                                <b class="hidden-xs">@Request.Cookies["Personal"]["Name"] @Request.Cookies["Personal"]["Surname"]</b>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-small-cap m-t-10" style="margin-left:4px;">    MENU</li>
+                    <li>
+                        <a href="@Url.Action("Index","Statistics")" class="waves-effect">
+                            <span class="glyphicon glyphicon-stats"></span>
+                            <span class="hide-menu">
+                                &nbsp; Statistics
+                            </span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="@Url.Action("Index","Sales")" class="waves-effect">
+                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                            <span class="hide-menu">
+                                &nbsp; Sales
+                            </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="waves-effect">
+                            <span class="glyphicon glyphicon-briefcase"></span>
+                            <span class="hide-menu">
+                                &nbsp; Products<span class="fa arrow"></span>
+                            </span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="@Url.Action("StockInProduct","Product")">Products in Stock</a></li>
+                            <li><a href="@Url.Action("SoldProducts","Product")">Sold Products</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index","Customer")" class="waves-effect">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span class="hide-menu">
+                                &nbsp; Customers
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index","Personal")" class="waves-effect">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span class="hide-menu">
+                                &nbsp; Personal
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index","Admin")" class="waves-effect">
+                            <span class="glyphicon glyphicon-asterisk"></span>
+                            <span class="hide-menu">
+                                &nbsp; Admin Page
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Left navbar-header end -->
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+                <!-- /.container-fluid -->
+                <footer class="footer text-center"> @DateTime.Now.Year &copy;  - Talha ERDOGAN - Stock Automation </footer>
+            </div>
+        </div>
+        <!-- /#wrapper -->
+    </div>
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <!-- Menu Plugin JavaScript -->
+    <script src="~/Scripts/sidebar-nav.min.js"></script>
+    <!--slimscroll JavaScript -->
+    <script src="~/Scripts/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="~/Scripts/waves.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="~/Scripts/custom.js"></script>
+    <!--Style Switcher -->
+    <script src="~/Scripts/jQuery.style.switcher.js"></script>
+    <!-- Sweet Alert -->
+    <script src="~/Scripts/sweetalert2.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
