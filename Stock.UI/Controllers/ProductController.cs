@@ -1,4 +1,5 @@
 ﻿using Stock.Business;
+using Stock.Data;
 using Stock.UI.Helper;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,11 @@ namespace Stock.UI.Controllers
     {
 
         private readonly ProductService productService;
+        private readonly BrandService brandService;
         public ProductController()
         {
             productService = new ProductService();
+            brandService = new BrandService();
         }
 
         public ActionResult StockInProduct()
@@ -42,10 +45,38 @@ namespace Stock.UI.Controllers
             }, JsonRequestBehavior.AllowGet
             );
         }
-        public ActionResult SoldProducts()
+
+
+        public ActionResult Add()
         {
-            return View();
+            var brand = brandService.GetAll();
+            return View(brand);
         }
-        
+
+        [HttpPost]
+        public JsonResult Add(Product model)
+        {
+            if (model.BrandId==0)
+            {
+                return Json("3");
+            }
+            try
+            {
+                if (model.BuyingPrice != 0 && model.SalesPrice != 0 && model.Kdv != 0)
+                {
+                    model.CreateDate = DateTime.Now;
+                    productService.Add(model);
+                    return Json("1");
+                }
+                return Json("2");
+            }
+            catch { return Json("0"); }
+        }
+
+        //public ActionResult SoldProducts()
+        //{
+        //    return View();
+        //}
+
     }
 }

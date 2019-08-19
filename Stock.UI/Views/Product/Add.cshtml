@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Product Add";
+}
+
+@model List<Stock.Data.Brand>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form id="productForm" method="post">
+                        <div class="form-body">
+                            <h3 class="box-title">Product Add</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label class="control-label">Brand</label>
+                                <select name="BrandId" class="form-control select2">
+                                    <option>Brand - Select</option>
+                                    @foreach (var brand in Model)
+                                    {
+                                        <option value="@brand.Id">@brand.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input type="text" name="Name" class="form-control" placeholder="Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Price</label>
+                                <input type="number" name="Piece" class="form-control" placeholder="Price" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Buying Price</label>
+                                <input type="text" name="BuyingPrice" class="form-control" placeholder="Buying Price" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Kdv</label>
+                                <input type="text" name="Kdv" class="form-control" placeholder="Exp : 2,1" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Sales Price</label>
+                                <input type="text" name="SalesPrice" class="form-control" placeholder="Sales Price" required>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
+                            <a href="@Url.Action("StockInProduct","Product")" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/mask.js"></script>
+    @*<script src="~/Scripts/urun.js"></script>*@
+    <script>
+       //Ürün ekle
+        $("#productForm").on("submit", function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/Product/Add',
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (result) {
+                    if (result == "1") {
+                        swal("Added", "Product Added Successfully!", "success");
+                        setTimeout('direct()', 3000)
+                    }
+                    if (result == "2") {
+                        swal("Error", "Kdv, The purchase price and the purchase price should be separated by commas, not a point.!", "error");
+                    }
+                    if (result == "3") {
+                        swal("Opps..", "Please Select Brand.!", "error");
+                    }
+                },
+                error: function () {
+                    swal("Hata", "An error occurred!", "error");
+                }
+            });
+        });
+        //Ürün sayfasına yönlendir
+        function direct() {
+            location.href = '/Product/StockInProduct';
+        }
+
+    </script>
+}

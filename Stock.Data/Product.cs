@@ -13,6 +13,7 @@ namespace Stock.Data
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public int BrandId { get; set; }
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(50)]
