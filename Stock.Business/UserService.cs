@@ -18,30 +18,33 @@ namespace Stock.Business
             }
         }
 
-        public UserInformation GetUserInformationByUserNameAndPassword(string userName,string password)
+        public UserInformation GetUserInformationByUserNameAndPassword(string userName, string password)
         {
+            AuthorityService authorityService = new AuthorityService();
             using (AppDbContext db = new AppDbContext())
             {
                 //return db.User.Where(p => p.UserName== userName &&p.Password==password).FirstOrDefault();
-                var list= (from u in db.User
-                                       join p in db.Personal on u.PersonalId equals p.Id
-                                       join a in db.Authority on u.AuthorityId equals a.Id
-                                       where u.UserName==userName && u.Password==password
-                                       select new UserInformation() {
-                                           Id=u.Id,
-                                           UserName=u.UserName,
-                                           Password=u.Password,
-                                           AuthorityId=u.AuthorityId,
-                                           AuthorityName=a.Name,
-                                           PersonalId=u.PersonalId,
-                                           Name=p.Name,
-                                           Surname=p.Surname,
-                                           Phone=p.Phone,
-                                           Address=p.Address,
-                                           Salary=p.Salary,
-                                           Image=p.Image,
-                                           EntryDate=p.EntryDate,
-                                       }).FirstOrDefault();
+                var list = (from u in db.User
+                            join p in db.Personal on u.PersonalId equals p.Id
+                            //join a in authorityService.GetAll() on u.AuthorityId equals a.Id
+                            where u.UserName == userName && u.Password == password
+                            select new UserInformation()
+                            {
+                                Id = u.Id,
+                                UserName = u.UserName,
+                                Password = u.Password,
+                                AuthorityId = u.AuthorityId,
+                                //AuthorityName = a.Name,
+                                PersonalId = u.PersonalId,
+                                Name = p.Name,
+                                Surname = p.Surname,
+                                Phone = p.Phone,
+                                Address = p.Address,
+                                Salary = p.Salary,
+                                Image = p.Image,
+                                EntryDate = p.EntryDate,
+                            }).FirstOrDefault();
+                list.AuthorityName = authorityService.GetAuthorityById(list.AuthorityId).Name;
                 return list;
             }
         }
