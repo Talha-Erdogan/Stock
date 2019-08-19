@@ -118,7 +118,7 @@
             })
         });
 
-        //Müşteri Güncelle
+        //Customer Edit
         $(document).on("click", "#btn_Edit", function () {
             var idValues = {
                 id: $(this).val()
@@ -182,40 +182,40 @@
             });
         });
 
-        //Müşteri Borçu Öde
+        //Customer Debt Edit
         $(document).on("click", "#btn_debt", function () {
-            var deger = $(this).val();
+            var custId = $(this).val();
             swal({
-                title: 'Borcunun ne kadarını verdi?',
+                title: 'Received Amount?',
                 html:
-                    '<input type="number" id="tutar" placeholder="Tutar giriniz" class="swal2-input color">',
+                    '<input type="number" id="amount" placeholder="Enter Amount" class="swal2-input color">',
                 preConfirm: function () {
-                    var degerler = {
-                        id: deger,
-                        tutar: $('#tutar').val()
+                    var parameter = {
+                        customerId: custId,
+                        amount: $('#amount').val()
                     };
                     $.ajax({
                         type: 'POST',
-                        url: '/Musteri/BorcGuncelle',
-                        data: degerler,
+                        url: '/Customer/DebtEdit',
+                        data: parameter,
                         dataType: "json",
-                        success: function (gelenDeg) {
-                            if (gelenDeg == "1") {
-                                swal("Başarılı!", "Borç Başarıyla Güncellendi!", "success");
+                        success: function (result) {
+                            if (result == "1") {
+                                swal("Success!", "Debt Successfully Updated!", "success");
                                 Customers();
                             }
-                            else if (gelenDeg == "2")
-                                swal("Hata!", "Borcunuzdan büyük değer giremezsiniz!", "error");
+                            else if (result == "2")
+                                swal("Error!", "You cannot enter a value greater than your debt!", "error");
                             else
-                                swal("Hata!", "Borç Güncellenirken hata oluştu!", "error");
+                                swal("Error!", "An Error Has Occurred!", "error");
                         },
                         error: function () {
-                            swal("Hata!", "Borç Güncellenirken hata oluştu!", "error");
+                            swal("Hata!", "An Error Has Occurred!", "error");
                         }
                     });
                 },
                 onOpen: function () {
-                    $('#tutar').focus()
+                    $('#amount').focus()
                 }
             });
         });

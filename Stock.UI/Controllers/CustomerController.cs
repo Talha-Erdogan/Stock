@@ -152,5 +152,37 @@ namespace Stock.UI.Controllers
             catch { return Json("0"); }
         }
         #endregion
+
+        #region Debt Edit
+        [HttpPost]
+        public JsonResult DebtEdit(int customerId, int amount)
+        {
+            try
+            {
+                if (amount <= 0) return Json("0");
+
+                var customer = customerService.GetCustomerById(customerId);
+                if (customer!=null)
+                {
+                    if (customer.Debt>=amount)
+                    {
+                        var remainingAmount = customer.Debt - amount;
+                        customer.Debt = remainingAmount;
+                        customerService.Update(customer);
+                        return Json("1");
+                    }
+                    else
+                    {
+                        return Json("2");
+                    }
+                }
+                else
+                {
+                    return Json("0");
+                }
+            }
+            catch { return Json("0"); }
+        }
+        #endregion
     }
 }
