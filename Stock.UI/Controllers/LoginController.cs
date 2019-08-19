@@ -11,16 +11,22 @@ namespace Stock.UI.Controllers
 {
     public class LoginController : Controller
     {
+        #region Private Member
         private UserService userService;
         private PersonalService personalService;
         private AuthorityService authorityService;
+        #endregion
+
+        #region Constructor
         public LoginController()
         {
             userService = new UserService();
             personalService = new PersonalService();
             authorityService = new AuthorityService();
         }
-        // GET: Login
+        #endregion
+
+        #region Login
         public ActionResult Index()
         {
             return View();
@@ -55,7 +61,9 @@ namespace Stock.UI.Controllers
             }
             catch { return Json("0"); }
         }
+        #endregion
 
+        #region Logout
         public ActionResult Logout()
         {
             if (Request.Cookies["Personal"] != null)
@@ -64,5 +72,6 @@ namespace Stock.UI.Controllers
             }
             return Redirect("Index");
         }
+        #endregion
     }
 }

@@ -26,15 +26,13 @@
 
 @section scripts{
     <link href="~/Content/Css/duzenlenen.css" rel="stylesheet" />
-    @*<script src="~/Scripts/musteri.js"></script>*@
     <script type="text/javascript">
         $(document).ready(function () {
             Customers();
 
         });
 
-
-        //Müşteri Bilgilerini Getir
+        //Customer Information (Table)
         function Customers() {
             $('#customerTable').html("");
             var thead = '<thead><tr><th>Select</th><th>Name Surname</th><th>Phone</th><th>Address</th><th>Dept</th><th>Edit</th></tr></thead>';
@@ -48,39 +46,9 @@
                     $('#customerTable').append(user);
                 }
             });
-            //var tfoot = '<tfoot><tr><th>Seç</th><th>Ad Soyad</th><th>Tel</th><th>Adres</th><th>Borç</th><th>Kayit Tarihi</th><th>Güncelle</th></tr></tfoot>';
-            //$('#customerTable').append(tfoot);
         }
 
-        //Müşteri ekle
-        //$("#veri").on("submit", function (event) {
-        //    event.preventDefault();
-        //    $.ajax({
-        //        type: "POST",
-        //        url: '/Musteri/Ekle',
-        //        data: $(this).serialize(),
-        //        dataType: "json",
-        //        success: function (gelenDeg) {
-        //            if (gelenDeg == "1") {
-        //                swal("Eklendi", "Müşteri Başarıyla Eklendi!", "success");
-        //                setTimeout('yonlendir()', 3000)
-        //            }
-        //            if (gelenDeg == "0")
-        //                swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
-        //        },
-        //        error: function () {
-        //            swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
-        //        }
-        //    });
-        //});
-
-        //Müşteri sayfasına yönlendir
-        @*function yonlendir() {
-            location.href = '/Customer/Index';
-            //window.location.href = "@Url.Action("List","Member")";
-        }*@
-
-        //Müşteri sil
+        //Customer Delete
         $("#deleteBtn").click(function () {
             var data = [];
             var sayac = 0;
@@ -123,16 +91,6 @@
             var idValues = {
                 id: $(this).val()
             };
-
-            //$.getJSON('/Musteri/Guncelle', function (data) {
-            //    for (var item in data.Result) {
-            //        var checkbox = '<input type="checkbox" name="selectedd" value=' + data.Result[item].ID + ' />';
-            //        var debt = '<button id="btn_debt" value="' + data.Result[item].ID + '" class="btn btn-block btn-danger">' + data.Result[item].Debt + ' TL</button>';
-            //        var button = '<button id="btn_Edit" value="' + data.Result[item].ID + '" class="btn btn-block btn-info">Güncelle</button>';
-            //        var user = '<tbody><tr><td>' + checkbox + '</td><td>' + data.Result[item].Ad + ' ' + data.Result[item].Soyad + '</td><td>' + data.Result[item].Tel + '</td><td>' + data.Result[item].Adres + '</td><td>' + debt + '</td><td>' + data.Result[item].KayitTarihi + '</td><td>' + button + '</td></tr></tbody>';
-            //        $('#customerTable').append(user);
-            //    }
-            //});
 
             $.ajax({
                 type: 'POST',

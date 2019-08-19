@@ -14,6 +14,8 @@ namespace Stock.Data
         [Key]
         public int Id { get; set; }
         public int BrandId { get; set; }
+        [Required(ErrorMessage = "Name is required.")]
+        [StringLength(50)]
         public string Name { get; set; }
         public int Piece { get; set; }
         public double BuyingPrice { get; set; }

@@ -38,7 +38,6 @@
                             <div style="height:21px;width:108px;display:inline-block;">
                                 <p style="color:white;text-transform :lowercase;font-family: 'Times New Roman',Times, serif;">s<span style="color:orange;text-transform:uppercase;font-weight:bold;font-size:25px;font-family: 'Times New Roman',Times, serif;">T</span>ock</p>
                             </div>
-                            @*<img src="~/Content/Icons/eliteadmin-text.png" alt="home" />*@
                         </span>
                     </a>
                 </div>
@@ -57,13 +56,6 @@
                 </ul>
                 <ul class="nav navbar-top-links navbar-right pull-right">
 
-                    <!-- /.dropdown -->
-                    <!-- /.dropdown -->
-
-
-
-
-
                     <li class="dropdown">
                         <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
                             <img src="@Request.Cookies["Personal"]["Image"]" alt="user-img" width="36" class="img-circle">
@@ -71,19 +63,14 @@
                         </a>
                         <ul class="dropdown-menu dropdown-user animated flipInY">
                             <li><a href="#"><i class="ti-user"></i> Profile</a></li>
-                            <li><a href="#"><i class="ti-wallet"></i> İstatistiklerim</a></li>
-                            <li><a href="#"><i class="ti-settings"></i> Hesap Ayarları</a></li>
+                            <li><a href="#"><i class="ti-wallet"></i> Statistics</a></li>
+                            <li><a href="#"><i class="ti-settings"></i> Option</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="@Url.Action("Logout","Login")"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
-                        <!-- /.dropdown-user -->
                     </li>
-                    <!-- /.dropdown -->
                 </ul>
             </div>
-            <!-- /.navbar-header -->
-            <!-- /.navbar-top-links -->
-            <!-- /.navbar-static-side -->
         </nav>
         <!-- Left navbar-header -->
         <div class="navbar-default sidebar" role="navigation">
