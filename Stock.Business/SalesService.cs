@@ -80,5 +80,30 @@ namespace Stock.Business
             }
         }
 
+        public int DeleteSalesByCustomerId(int customerId)
+        {
+            try
+            {
+                using (AppDbContext db = new AppDbContext())
+                {
+                    var sales = db.Sales.Where(x => x.CustomerId == customerId).ToList();
+                    if (sales!=null)
+                    {
+                        foreach (var item in sales)
+                        {
+                            db.Sales.Remove(item);
+                        }
+                        return db.SaveChanges();
+                    }
+                    return 0;
+                }
+            }
+            catch
+            {
+
+                return 0;
+            }
+        }
+
     }
 }

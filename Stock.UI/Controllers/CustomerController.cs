@@ -14,12 +14,14 @@ namespace Stock.UI.Controllers
     {
         #region Private Member
         private readonly CustomerService customerService;
+        private readonly SalesService salesService;
         #endregion
 
         #region Constructor
         public CustomerController()
         {
             customerService = new CustomerService();
+            salesService = new SalesService();
         }
         #endregion
 
@@ -74,8 +76,6 @@ namespace Stock.UI.Controllers
         }
         #endregion
 
-
-
         #region Edit
         [HttpPost]
         public JsonResult Edit (int id)
@@ -119,13 +119,35 @@ namespace Stock.UI.Controllers
                 {
                     return Json("0");
                 }
-                //var musteri = DB.Musteri.Where(mus => mus.ID == id).FirstOrDefault();
-                //musteri.Ad = ad;
-                //musteri.Soyad = soyad;
-                //musteri.Tel = tel;
-                //musteri.Adres = adres;
-                //DB.SaveChanges();
+            }
+            catch { return Json("0"); }
+        }
+        #endregion
+
+        #region Delete
+        [HttpPost]
+        public JsonResult Delete(int[] data)
+        {
+            try
+            {
+                if (data == null) return Json("2");
+                foreach (var cusId in data)
+                {
+
+                    var custmr = customerService.GetCustomerById(cusId);
+                    if (custmr!=null)
+                    {
+                        customerService.Delete(custmr.Id);
+                        salesService.DeleteSalesByCustomerId(custmr.Id);
+                    }
+                    else
+                    {
+                        return Json("0");
+                    }
+
+                }
                 
+                return Json("1");
             }
             catch { return Json("0"); }
         }

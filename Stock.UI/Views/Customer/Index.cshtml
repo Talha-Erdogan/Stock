@@ -89,30 +89,30 @@
                 sayac++;
             });
             swal({
-                title: 'Silinsin mi?',
-                text: "Müşteri(leri)yi gerçekten silmek istiyor musunuz?",
+                title: 'Delete?',
+                text: "Are you sure?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sil'
+                confirmButtonText: 'Delete'
             }).then(function () {
                 $.ajax({
                     type: "POST",
-                    url: '/Musteri/Sil',
+                    url: '/Customer/Delete',
                     data: { data },
                     dataType: "json",
-                    success: function (gelenDeg) {
-                        if (gelenDeg == "1") {
-                            swal("Silindi", "Silme işlemi başarıyla gerçekleşti!", "success");
+                    success: function (result) {
+                        if (result == "1") {
+                            swal("Success", "Deleted Successfully!", "success");
                             Customers();
                         }
-                        else if (gelenDeg == "2") {
-                            swal("Hata!", "Silinecek birşey bulunamadı!", "error");
+                        else if (result == "2") {
+                            swal("Error!", "An error occurred!", "error");
                         }
                     },
                     error: function () {
-                        swal("Hata!", "Müşteri Silinirken hata oluştu!", "error");
+                        swal("Error!", "An error occurred!", "error");
                     }
                 });
             })
