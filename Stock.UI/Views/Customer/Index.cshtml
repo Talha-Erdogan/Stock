@@ -29,13 +29,13 @@
     @*<script src="~/Scripts/musteri.js"></script>*@
     <script type="text/javascript">
         $(document).ready(function () {
-            Musteriler();
+            Customers();
 
         });
 
 
         //Müşteri Bilgilerini Getir
-        function Musteriler() {
+        function Customers() {
             $('#customerTable').html("");
             var thead = '<thead><tr><th>Select</th><th>Name Surname</th><th>Phone</th><th>Address</th><th>Dept</th><th>Edit</th></tr></thead>';
             $('#customerTable').append(thead);
@@ -53,31 +53,32 @@
         }
 
         //Müşteri ekle
-        $("#veri").on("submit", function (event) {
-            event.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: '/Musteri/Ekle',
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function (gelenDeg) {
-                    if (gelenDeg == "1") {
-                        swal("Eklendi", "Müşteri Başarıyla Eklendi!", "success");
-                        setTimeout('yonlendir()', 3000)
-                    }
-                    if (gelenDeg == "0")
-                        swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
-                },
-                error: function () {
-                    swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
-                }
-            });
-        });
+        //$("#veri").on("submit", function (event) {
+        //    event.preventDefault();
+        //    $.ajax({
+        //        type: "POST",
+        //        url: '/Musteri/Ekle',
+        //        data: $(this).serialize(),
+        //        dataType: "json",
+        //        success: function (gelenDeg) {
+        //            if (gelenDeg == "1") {
+        //                swal("Eklendi", "Müşteri Başarıyla Eklendi!", "success");
+        //                setTimeout('yonlendir()', 3000)
+        //            }
+        //            if (gelenDeg == "0")
+        //                swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
+        //        },
+        //        error: function () {
+        //            swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
+        //        }
+        //    });
+        //});
 
         //Müşteri sayfasına yönlendir
-        function yonlendir() {
+        @*function yonlendir() {
             location.href = '/Customer/Index';
-        }
+            //window.location.href = "@Url.Action("List","Member")";
+        }*@
 
         //Müşteri sil
         $("#deleteBtn").click(function () {
@@ -104,7 +105,7 @@
                     success: function (gelenDeg) {
                         if (gelenDeg == "1") {
                             swal("Silindi", "Silme işlemi başarıyla gerçekleşti!", "success");
-                            Musteriler();
+                            Customers();
                         }
                         else if (gelenDeg == "2") {
                             swal("Hata!", "Silinecek birşey bulunamadı!", "error");
@@ -162,7 +163,7 @@
                                 success: function (gelenDeg) {
                                     if (gelenDeg != "0") {
                                         swal("Başarılı!", "Müşteri Başarıyla Güncellendi!", "success");
-                                        Musteriler();
+                                        Customers();
                                     }
                                 },
                                 error: function () {
@@ -201,7 +202,7 @@
                         success: function (gelenDeg) {
                             if (gelenDeg == "1") {
                                 swal("Başarılı!", "Borç Başarıyla Güncellendi!", "success");
-                                Musteriler();
+                                Customers();
                             }
                             else if (gelenDeg == "2")
                                 swal("Hata!", "Borcunuzdan büyük değer giremezsiniz!", "error");

@@ -1,21 +1,75 @@
-﻿@model Stock.UI.Models.Customer.AddViewModel
-@{
+﻿@{
     ViewBag.Title = "Customer Add";
 }
 
-<h1>add</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form id="customer_form" method="post">
+                        <div class="form-body">
+                            <h3 class="box-title">Customer Add</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input type="text" name="Name" class="form-control" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Surname</label>
+                                <input type="text" name="Surname" class="form-control" placeholder="Surname">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Phone</label>
+                                <input type="number" name="Phone" class="form-control" placeholder="(999) 999-9999">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Address</label>
+                                <input type="text" name="Address" class="form-control" placeholder="Address">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Add</button>
+                            <a href="@Url.Action("Index","Customer")" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
-
-
-    <script>
-
-        $(document).ready(function () {
-            alert("sdaad");
-
-            swal("Here's a message!")
-
+    <script src="~/Scripts/mask.js"></script>
+    
+    <script type="text/javascript">
+       
+        $("#customer_form").on("submit", function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/Customer/Add',
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (result) {
+                    if (result == "1") {
+                        swal("Added", "Customer Successfully Added!", "success");
+                        setTimeout('direct()', 1000)
+                    }
+                    if (result == "0")
+                        swal("Error", "Error Adding Customer!", "error");
+                },
+                error: function () {
+                    swal("Error", "Error Adding Customer!", "error");
+                }
+            });
         });
+       
+        function direct() {
+            location.href = '/Customer/Index';
+            //window.location.href = "@Url.Action("Index","Customer")";
+        }
 
-
+      
     </script>
 }
