@@ -73,6 +73,21 @@ namespace Stock.UI.Controllers
             catch { return Json("0"); }
         }
 
+        [HttpPost]
+        public JsonResult Delete(int[] data)
+        {
+            try
+            {
+                if (data == null) return Json("2");
+                foreach (var productId in data)
+                {
+                    productService.Delete(productId);
+                }
+                return Json("1");
+            }
+            catch { return Json("0"); }
+        }
+
         //public ActionResult SoldProducts()
         //{
         //    return View();

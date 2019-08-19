@@ -10,7 +10,7 @@
             <p class="text-muted m-b-30">
                 <div class="row">
                     <div class="col-lg-1 col-md-1 col-sm-2 col-xs-5">
-                        <button id="sil" class="btn btn-block btn-info">Delete</button>
+                        <button id="deleteBtn" class="btn btn-block btn-info">Delete</button>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-2 col-xs-5">
                         <a href="@Url.Action("Add","Product")" class="btn btn-block btn-info">Add</a>
@@ -65,34 +65,34 @@
         };
 
         //Ürün ekle
-        $("#veri").on("submit", function (event) {
-            event.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: '/Urun/Ekle',
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function (gelenDeg) {
-                    if (gelenDeg == "1") {
-                        swal("Eklendi", "Müşteri Başarıyla Eklendi!", "success");
-                        setTimeout('direct()', 3000)
-                    }
-                    if (gelenDeg == "2") {
-                        swal("Hata", "Kdv, alış fiyatı ve satış fiyatı nokta ile değil virgül ile ayrılmalıdır!", "error");
-                    }
-                },
-                error: function () {
-                    swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
-                }
-            });
-        });
+        //$("#veri").on("submit", function (event) {
+        //    event.preventDefault();
+        //    $.ajax({
+        //        type: "POST",
+        //        url: '/Urun/Ekle',
+        //        data: $(this).serialize(),
+        //        dataType: "json",
+        //        success: function (gelenDeg) {
+        //            if (gelenDeg == "1") {
+        //                swal("Eklendi", "Müşteri Başarıyla Eklendi!", "success");
+        //                setTimeout('direct()', 3000)
+        //            }
+        //            if (gelenDeg == "2") {
+        //                swal("Hata", "Kdv, alış fiyatı ve satış fiyatı nokta ile değil virgül ile ayrılmalıdır!", "error");
+        //            }
+        //        },
+        //        error: function () {
+        //            swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
+        //        }
+        //    });
+        //});
         //Ürün sayfasına yönlendir
         function direct() {
             location.href = '/Product/StockInProduct';
         }
 
         //Ürün sil
-        $("#sil").click(function () {
+        $("#deleteBtn").click(function () {
             var data = [];
             var sayac = 0;
             $("input[name='selectedd']:checked").each(function () {
@@ -100,32 +100,32 @@
                 sayac++;
             });
             swal({
-                title: "Siliniyor..",
-                text: "Ürün(leri)ü gerçekten silmek istiyor musunuz?",
+                title: "Deleting..",
+                text: "Are you sure?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: "btn-danger",
-                confirmButtonText: "Sil",
+                confirmButtonText: "Delete",
                 closeOnConfirm: false,
                 showLoaderOnConfirm: true
             }).then(function () {
                 setTimeout(function () {
                     $.ajax({
                         type: "POST",
-                        url: '/Urun/Sil',
+                        url: '/Product/Delete',
                         data: { data },
                         dataType: "json",
-                        success: function (gelenDeg) {
-                            if (gelenDeg == "1") {
-                                swal("Silindi", "Silme işlemi başarıyla gerçekleşti!", "success");
+                        success: function (result) {
+                            if (result == "1") {
+                                swal("Deleted", "Product Delete Successfuly!", "success");
                                 Urunler();
                             }
-                            else if (gelenDeg == "2") {
-                                swal("Hata!", "Silinecek birşey bulunamadı!", "error");
+                            else if (result == "2") {
+                                swal("Error!", "An error occurred!", "error");
                             }
                         },
                         error: function () {
-                            swal("Hata!", "Ürün Silinirken hata oluştu!", "error");
+                            swal("Error!", "An error occurred!", "error");
                         }
                     });
                 });
