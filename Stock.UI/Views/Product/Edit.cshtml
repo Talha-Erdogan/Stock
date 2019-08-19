@@ -1,0 +1,202 @@
+﻿@{
+    ViewBag.Title = "Product Edit";
+}
+@model Stock.Data.Product
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form id="formProductEdit" method="post">
+                        <div class="form-body">
+                            <h3 class="box-title">Product Edit</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label class="control-label">Brand</label>
+                                <select name="BrandId" class="form-control select2">
+                                    <option>Brand - Select</option>
+                                    @{
+                                        var selected = ViewBag.Brand as List<Stock.Data.Brand>;
+                                         var BrandName=selected.Where(x => x.Id == Model.BrandId).FirstOrDefault().Name;
+                                     }
+                                    @foreach (var brand in ViewBag.Brand)
+                                    {
+                                        if (brand.Id == Model.BrandId)
+                                        {
+                                            <option selected value="@Model.BrandId">@BrandName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@brand.Id">@brand.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Ad</label>
+                                <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Ürünlerinin Adını Giriniz" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Adet</label>
+                                <input type="number" name="Piece" value="@Model.Piece" class="form-control" placeholder="Piece" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Buying Price</label>
+                                <input type="text" name="BuyingPrice" value="@Model.BuyingPrice" class="form-control" placeholder="Buying Price" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Kdv</label>
+                                <input type="text" name="Kdv" value="@Model.Kdv" class="form-control" placeholder="Örn : 2,1" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Sales Price</label>
+                                <input type="text" name="SalesPrice" value="@Model.SalesPrice" class="form-control" placeholder="Sales Price" required>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input type="hidden" name="Id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Edit</button>
+                            <a href="@Url.Action("StockInProduct","Product")" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/mask.js"></script>
+    @*<script src="~/Scripts/urun.js"></script>*@
+
+
+    <script>
+        //Ürün Bilgilerini Getir
+        //function Urunler() {
+        //    var url = '/Product/List';
+        //    $('#productTable').html("");
+        //    var thead = '<thead><tr><th>Select</th><th>Brand</th><th>Name</th><th>Piece</th><th>Buying Price</th><th>Kdv</th><th>Sales</th><th>Edit</th></tr></thead>';
+        //    $('#productTable').append(thead);
+        //    $.getJSON(url, function (data) {
+        //        for (var item in data.Result) {
+        //            var checkbox = '<input type="checkbox" name="selectedd" value=' + data.Result[item].Id + ' />';
+        //            var button = '<button id="edit_btn" value="' + data.Result[item].Id + '" class="btn btn-block btn-info">Edit</button>';
+        //            var user = '<tbody><tr><td>' + checkbox + '</td><td>' + data.Result[item].BrandName + '</td><td>' + data.Result[item].Name + '</td><td>' + data.Result[item].Piece + '</td><td>' + data.Result[item].BuyingPrice + ' TL</td><td>% ' + data.Result[item].Kdv + '</td><td>' + data.Result[item].SalesPrice + ' TL</td><td>' + button + '</td></tr></tbody>';
+        //            $('#productTable').append(user);
+        //        }
+        //    });
+            //var tfoot = '<tfoot><tr><th>Seç</th><th>Marka</th><th>Ad</th><th>Adet</th><th>Alış Fiyatı</th><th>Kdv</th><th>Satış Fiyatı</th><th>Eklenme Tarihi</th><th>Güncelle</th></tr></tfoot>';
+            //$('#productTable').append(tfoot);
+        //};
+
+        //Satılan Ürün Bilgilerini Getir
+        //function Satilanlar() {
+        //    $('#satilmis').html("");
+        //    var thead = '<thead><tr><th>Marka</th><th>Ad</th><th>Adet</th><th>Alış Fiyatı</th><th>Kdv</th><th>Satış Fiyatı</th><th>Eklenme Tarihi</th><th>Tutar</th></tr></thead>';
+        //    $('#satilmis').append(thead);
+        //    $.getJSON('/Urun/Satilanlar', function (data) {
+        //        for (var item in data.Result) {
+        //            var user = '<tr><td>' + data.Result[item].Marka + '</td><td>' + data.Result[item].Ad + '</td><td>' + data.Result[item].Adet + '</td><td>' + data.Result[item].AlisFiyat + ' TL</td><td>% ' + data.Result[item].Kdv + '</td><td>' + data.Result[item].SatisFiyat + ' TL</td><td>' + data.Result[item].EklenmeTarih + '</td><td>' + data.Result[item].Tutar + ' TL</td></tr>';
+        //            $('table#satilmis').append(user);
+        //        }
+        //    });
+        //};
+
+        //Ürün ekle
+        //$("#veri").on("submit", function (event) {
+        //    event.preventDefault();
+        //    $.ajax({
+        //        type: "POST",
+        //        url: '/Urun/Ekle',
+        //        data: $(this).serialize(),
+        //        dataType: "json",
+        //        success: function (gelenDeg) {
+        //            if (gelenDeg == "1") {
+        //                swal("Eklendi", "Müşteri Başarıyla Eklendi!", "success");
+        //                setTimeout('direct()', 3000)
+        //            }
+        //            if (gelenDeg == "2") {
+        //                swal("Hata", "Kdv, alış fiyatı ve satış fiyatı nokta ile değil virgül ile ayrılmalıdır!", "error");
+        //            }
+        //        },
+        //        error: function () {
+        //            swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
+        //        }
+        //    });
+        //});
+        //Ürün sayfasına yönlendir
+        function direct() {
+            location.href = '/Product/StockInProduct';
+        }
+
+        //Ürün sil
+        //$("#deleteBtn").click(function () {
+        //    var data = [];
+        //    var sayac = 0;
+        //    $("input[name='selectedd']:checked").each(function () {
+        //        data[sayac] = $(this).val();
+        //        sayac++;
+        //    });
+        //    swal({
+        //        title: "Deleting..",
+        //        text: "Are you sure?",
+        //        type: "warning",
+        //        showCancelButton: true,
+        //        confirmButtonClass: "btn-danger",
+        //        confirmButtonText: "Delete",
+        //        closeOnConfirm: false,
+        //        showLoaderOnConfirm: true
+        //    }).then(function () {
+        //        setTimeout(function () {
+        //            $.ajax({
+        //                type: "POST",
+        //                url: '/Product/Delete',
+        //                data: { data },
+        //                dataType: "json",
+        //                success: function (result) {
+        //                    if (result == "1") {
+        //                        swal("Deleted", "Product Delete Successfuly!", "success");
+        //                        Urunler();
+        //                    }
+        //                    else if (result == "2") {
+        //                        swal("Error!", "An error occurred!", "error");
+        //                    }
+        //                },
+        //                error: function () {
+        //                    swal("Error!", "An error occurred!", "error");
+        //                }
+        //            });
+        //        });
+        //    })
+        //});
+
+        //Ürün Güncelleme Sayfasına yönlendir
+        $(document).on("click", "#edit_btn", function () {
+            window.location.href = "/Urun/Guncelle/" + $(this).val();
+        });
+
+        //Ürün Güncelle
+        $("#formProductEdit").on("submit", function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/Product/Edit',
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (result) {
+                    if (result == "1") {
+                        swal("Edit", "Product Successfully Updated!", "success");
+                        setTimeout('direct()', 2000)
+                    }
+                    else
+                        swal("Error", "An error has occurred!", "error");
+                },
+                error: function () {
+                    swal("Error", "An error has occurred!", "error");
+                }
+            });
+        });
+
+    </script>
+}

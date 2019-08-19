@@ -88,6 +88,37 @@ namespace Stock.UI.Controllers
             catch { return Json("0"); }
         }
 
+
+        public ActionResult Edit(int id)
+        {
+            var product = productService.GetProductById(id);
+            ViewBag.Brand = brandService.GetAll();
+            return View(product);
+            //var urun = DB.Urun.Where(u => u.ID == id).FirstOrDefault();
+            //ViewBag.Marka = DB.Marka.ToList();
+            //return View(urun);
+        }
+
+        [HttpPost]
+        public JsonResult Edit(Product model)
+        {
+            try
+            {
+                model.CreateDate = DateTime.Now;
+                productService.Update(model);
+                //var urun = DB.Urun.Where(u => u.ID == model.ID).FirstOrDefault();
+                //urun.MarkaID = model.MarkaID;
+                //urun.Ad = model.Ad;
+                //urun.Adet = model.Adet;
+                //urun.AlisFiyat = model.AlisFiyat;
+                //urun.Kdv = model.Kdv;
+                //urun.SatisFiyat = model.SatisFiyat;
+                //DB.SaveChanges();
+                return Json("1");
+            }
+            catch { return Json("0"); }
+        }
+
         //public ActionResult SoldProducts()
         //{
         //    return View();
