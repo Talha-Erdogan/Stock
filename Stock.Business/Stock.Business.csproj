@@ -51,6 +51,7 @@
     <Compile Include="AuthorityService.cs" />
     <Compile Include="BrandService.cs" />
     <Compile Include="CustomerService.cs" />
+    <Compile Include="Model\ProductInformation.cs" />
     <Compile Include="Model\UserInformation.cs" />
     <Compile Include="PersonalService.cs" />
     <Compile Include="ProductService.cs" />

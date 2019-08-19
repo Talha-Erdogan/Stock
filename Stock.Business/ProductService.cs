@@ -1,4 +1,5 @@
-﻿using Stock.Data;
+﻿using Stock.Business.Model;
+using Stock.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,27 @@ namespace Stock.Business
             using (AppDbContext db = new AppDbContext())
             {
                 return db.Product.ToList();
+            }
+        }
+
+        public List<ProductInformation> GetAllWithBrandName()
+        {
+            using (AppDbContext db = new AppDbContext())
+            {
+                //return db.Product.ToList();
+                return (from p in db.Product
+                        join b in db.Brand on p.BrandId equals b.Id
+                        select new ProductInformation()
+                        {
+                            Id = p.Id,
+                            BrandName = b.Name,
+                            Name = p.Name,
+                            Piece = p.Piece,
+                            BuyingPrice = p.BuyingPrice,
+                            Kdv = p.Kdv,
+                            SalesPrice = p.SalesPrice,
+                            CreateDate = p.CreateDate
+                        }).ToList();
             }
         }
 
