@@ -26,14 +26,13 @@
 
 @section scripts{
     <link href="~/Content/Css/duzenlenen.css" rel="stylesheet" />
-    @*<script src="~/Scripts/urun.js"></script>*@
     <script type="text/javascript">
         $(document).ready(function () {
             Urunler();
         });
     </script>
     <script>
-        //Ürün Bilgilerini Getir
+        //Product List
         function Urunler() {
             var url = '/Product/List';
             $('#productTable').html("");
@@ -47,51 +46,14 @@
                     $('#productTable').append(user);
                 }
             });
-            //var tfoot = '<tfoot><tr><th>Seç</th><th>Marka</th><th>Ad</th><th>Adet</th><th>Alış Fiyatı</th><th>Kdv</th><th>Satış Fiyatı</th><th>Eklenme Tarihi</th><th>Güncelle</th></tr></tfoot>';
-            //$('#productTable').append(tfoot);
         };
-
-        //Satılan Ürün Bilgilerini Getir
-        function Satilanlar() {
-            $('#satilmis').html("");
-            var thead = '<thead><tr><th>Marka</th><th>Ad</th><th>Adet</th><th>Alış Fiyatı</th><th>Kdv</th><th>Satış Fiyatı</th><th>Eklenme Tarihi</th><th>Tutar</th></tr></thead>';
-            $('#satilmis').append(thead);
-            $.getJSON('/Urun/Satilanlar', function (data) {
-                for (var item in data.Result) {
-                    var user = '<tr><td>' + data.Result[item].Marka + '</td><td>' + data.Result[item].Ad + '</td><td>' + data.Result[item].Adet + '</td><td>' + data.Result[item].AlisFiyat + ' TL</td><td>% ' + data.Result[item].Kdv + '</td><td>' + data.Result[item].SatisFiyat + ' TL</td><td>' + data.Result[item].EklenmeTarih + '</td><td>' + data.Result[item].Tutar + ' TL</td></tr>';
-                    $('table#satilmis').append(user);
-                }
-            });
-        };
-
-        //Ürün ekle
-        //$("#veri").on("submit", function (event) {
-        //    event.preventDefault();
-        //    $.ajax({
-        //        type: "POST",
-        //        url: '/Urun/Ekle',
-        //        data: $(this).serialize(),
-        //        dataType: "json",
-        //        success: function (gelenDeg) {
-        //            if (gelenDeg == "1") {
-        //                swal("Eklendi", "Müşteri Başarıyla Eklendi!", "success");
-        //                setTimeout('direct()', 3000)
-        //            }
-        //            if (gelenDeg == "2") {
-        //                swal("Hata", "Kdv, alış fiyatı ve satış fiyatı nokta ile değil virgül ile ayrılmalıdır!", "error");
-        //            }
-        //        },
-        //        error: function () {
-        //            swal("Hata", "Müşteri Eklenirken Hata Oluştu!", "error");
-        //        }
-        //    });
-        //});
-        //Ürün sayfasına yönlendir
+       
+        
         function direct() {
             location.href = '/Product/StockInProduct';
         }
 
-        //Ürün sil
+        //Product Delete
         $("#deleteBtn").click(function () {
             var data = [];
             var sayac = 0;
@@ -132,32 +94,9 @@
             })
         });
 
-        //Ürün Güncelleme Sayfasına yönlendir
+        //Edit Button Onclick
         $(document).on("click", "#edit_btn", function () {
             window.location.href = "/Product/Edit/" + $(this).val();
         });
-
-        //Ürün Güncelle
-        $("#veriGuncelle").on("submit", function (event) {
-            event.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: '/Urun/Guncelle',
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function (gelenDeg) {
-                    if (gelenDeg == "1") {
-                        swal("Güncellendi", "Ürün Başarıyla Güncellendi!", "success");
-                        setTimeout('direct()', 3000)
-                    }
-                    else
-                        swal("Hata", "Ürün Güncellenirken Hata Oluştu!", "error");
-                },
-                error: function () {
-                    swal("Hata", "Ürün Güncellenirken Hata Oluştu!", "error");
-                }
-            });
-        });
-
     </script>
 }

@@ -12,15 +12,20 @@ namespace Stock.UI.Controllers
     [AppAuthorize]
     public class ProductController : Controller
     {
-
+        #region Private Member
         private readonly ProductService productService;
         private readonly BrandService brandService;
+        #endregion
+
+        #region Constructor
         public ProductController()
         {
             productService = new ProductService();
             brandService = new BrandService();
         }
+        #endregion
 
+        #region StockInProduct,List
         public ActionResult StockInProduct()
         {
             return View();
@@ -45,8 +50,9 @@ namespace Stock.UI.Controllers
             }, JsonRequestBehavior.AllowGet
             );
         }
+        #endregion
 
-
+        #region Add
         public ActionResult Add()
         {
             var brand = brandService.GetAll();
@@ -72,7 +78,9 @@ namespace Stock.UI.Controllers
             }
             catch { return Json("0"); }
         }
+        #endregion
 
+        #region Delete
         [HttpPost]
         public JsonResult Delete(int[] data)
         {
@@ -87,8 +95,9 @@ namespace Stock.UI.Controllers
             }
             catch { return Json("0"); }
         }
+        #endregion
 
-
+        #region MyRegion
         public ActionResult Edit(int id)
         {
             var product = productService.GetProductById(id);
@@ -118,6 +127,7 @@ namespace Stock.UI.Controllers
             }
             catch { return Json("0"); }
         }
+        #endregion
 
         //public ActionResult SoldProducts()
         //{

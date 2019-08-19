@@ -57,9 +57,8 @@
 
 @section scripts{
     <script src="~/Scripts/mask.js"></script>
-    @*<script src="~/Scripts/urun.js"></script>*@
     <script>
-       //Ürün ekle
+       //Product Add
         $("#productForm").on("submit", function (event) {
             event.preventDefault();
             $.ajax({
@@ -84,7 +83,7 @@
                 }
             });
         });
-        //Ürün sayfasına yönlendir
+
         function direct() {
             location.href = '/Product/StockInProduct';
         }
