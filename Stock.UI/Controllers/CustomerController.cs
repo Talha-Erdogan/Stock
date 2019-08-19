@@ -73,5 +73,62 @@ namespace Stock.UI.Controllers
             catch { return Json("0"); }
         }
         #endregion
+
+
+
+        #region Edit
+        [HttpPost]
+        public JsonResult Edit (int id)
+        {
+            try
+            {
+
+                var Result = (from obj in customerService.GetAll().Where(x => x.Id == id)
+                              select new
+                              {
+                                  Id = obj.Id,
+                                  Debt = obj.Debt,
+                                  Name = obj.Name,
+                                  Surname = obj.Surname,
+                                  Phone = obj.Phone,
+                                  Address = obj.Address,
+                              }).FirstOrDefault();
+
+                return Json(Result);
+            }
+            catch { return Json("0"); }
+        }
+        [HttpPost]
+        public JsonResult EditJSON(int id, string name, string surname, string phone, string address)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Customer model = new Customer();
+                    model.Id = id;
+                    model.Name = name;
+                    model.Surname = surname;
+                    model.Phone = phone;
+                    model.Address = address;
+                    model.RecordDate = DateTime.Now;
+                    customerService.Update(model);
+                    return Json("1");
+                }
+                else
+                {
+                    return Json("0");
+                }
+                //var musteri = DB.Musteri.Where(mus => mus.ID == id).FirstOrDefault();
+                //musteri.Ad = ad;
+                //musteri.Soyad = soyad;
+                //musteri.Tel = tel;
+                //musteri.Adres = adres;
+                //DB.SaveChanges();
+                
+            }
+            catch { return Json("0"); }
+        }
+        #endregion
     }
 }

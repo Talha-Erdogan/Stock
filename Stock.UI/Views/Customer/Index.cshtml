@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="white-box">
-            <h3 class="box-title m-b-0">Customer</h3>
+            <h3 class="box-title m-b-0">Customer List</h3>
             <p class="text-muted m-b-30">
                 <div class="row">
                     <div class="col-lg-1 col-md-1 col-sm-2 col-xs-5">
@@ -120,7 +120,7 @@
 
         //Müşteri Güncelle
         $(document).on("click", "#btn_Edit", function () {
-            var deger = {
+            var idValues = {
                 id: $(this).val()
             };
 
@@ -136,48 +136,48 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/Musteri/Guncelle',
-                data: deger,
+                url: '/Customer/Edit',
+                data: idValues,
                 dataType: "json",
                 success: function (gelenDeg) {
                     swal({
-                        title: 'Müşteri Güncelle',
+                        title: 'Customer Edit',
                         html:
-                            '<input id="ad" value="' + gelenDeg.Ad + '" placeholder="Müşterinin Adını Giriniz" class="swal2-input color">' +
-                            '<input id="soyad" value="' + gelenDeg.Soyad + '" placeholder="Müşterinin Soyadını Giriniz" class="swal2-input color">' +
-                            '<input id="tel" value="' + gelenDeg.Tel + '" placeholder="Müşterinin Telefonunu Giriniz" class="swal2-input color">' +
-                            '<input id="adres" value="' + gelenDeg.Adres + '" placeholder="Müşterinin Adresini Giriniz" class="swal2-input color">',
+                            '<input id="name" value="' + gelenDeg.Name + '" placeholder="Name" class="swal2-input color">' +
+                            '<input id="surname" value="' + gelenDeg.Surname + '" placeholder="Surname" class="swal2-input color">' +
+                            '<input id="phone" value="' + gelenDeg.Phone + '" placeholder="Phone" class="swal2-input color" type="number">' +
+                            '<input id="address" value="' + gelenDeg.Address + '" placeholder="Address" class="swal2-input color">',
                         preConfirm: function () {
                             var degerler = {
-                                id: deger.id,
-                                ad: $('#ad').val(),
-                                soyad: $('#soyad').val(),
-                                tel: $('#tel').val(),
-                                adres: $('#adres').val()
+                                id: idValues.id,
+                                name: $('#name').val(),
+                                surname: $('#surname').val(),
+                                phone: $('#phone').val(),
+                                address: $('#address').val()
                             };
                             $.ajax({
                                 type: 'POST',
-                                url: '/Musteri/GuncelleJSON',
+                                url: '/Customer/EditJSON',
                                 data: degerler,
                                 dataType: "json",
                                 success: function (gelenDeg) {
                                     if (gelenDeg != "0") {
-                                        swal("Başarılı!", "Müşteri Başarıyla Güncellendi!", "success");
+                                        swal("Success!", "Customer Successfully Updated!", "success");
                                         Customers();
                                     }
                                 },
                                 error: function () {
-                                    swal("Hata!", "Müşteri Güncellenirken hata oluştu!", "error");
+                                    swal("Error!", "Error!", "error");
                                 }
                             });
                         },
                         onOpen: function () {
-                            $('#ad').focus()
+                            $('#name').focus()
                         }
                     })
                 },
                 error: function (r, rr, rrr) {
-                    swal("Hata!", "" + rrr + "!", "error");
+                    swal("Error!", "" + rrr + "!", "error");
                 }
             });
         });

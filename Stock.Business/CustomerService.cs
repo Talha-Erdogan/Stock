@@ -48,12 +48,22 @@ namespace Stock.Business
             {
                 using (AppDbContext db = new AppDbContext())
                 {
+                    //customer.Debt = 0.1;
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    //var cus = db.Customer.Where(x => x.Id == customer.Id).FirstOrDefault();
+                    //if (cus!=null)
+                    //{
+                    //    cus.Name = customer.Name;
+                    //    cus.Surname = customer.Surname;
+                    //    cus.Phone = customer.Phone;
+                    //    cus.RecordDate=DateTime.Now
+                    //}
                     return db.SaveChanges();
                 }
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e);
                 return 0;
             }
         }

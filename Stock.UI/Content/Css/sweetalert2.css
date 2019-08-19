@@ -203,27 +203,33 @@ body.swal2-iosfix {
     .swal2-modal .swal2-file::placeholder,
     .swal2-modal .swal2-textarea::placeholder {
       color: #e6e6e6; }
-  .swal2-modal .swal2-range input {
-    float: left;
-    width: 80%; }
+    .swal2-modal .swal2-range input {
+        float: left;
+        width: 80%;
+    }
   .swal2-modal .swal2-range output {
     float: right;
     width: 20%;
     font-size: 20px;
     font-weight: 600;
     text-align: center; }
-  .swal2-modal .swal2-range input,
-  .swal2-modal .swal2-range output {
-    height: 43px;
-    line-height: 43px;
-    vertical-align: middle;
-    margin: 20px auto;
-    padding: 0; }
+    .swal2-modal .swal2-range input, .swal2-input[type='number']
+    .swal2-modal .swal2-range output {
+        height: 43px;
+        line-height: 43px;
+        vertical-align: middle;
+        margin: 20px auto;
+        padding: 0;
+    }
   .swal2-modal .swal2-input {
     height: 43px;
     padding: 0 12px; }
     .swal2-modal .swal2-input[type='number'] {
-      max-width: 150px; }
+        max-width: 670px;
+        width: 100%;
+        height: 43px;
+        padding: 0 12px;
+    }
   .swal2-modal .swal2-file {
     font-size: 20px; }
   .swal2-modal .swal2-textarea {

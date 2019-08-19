@@ -114,6 +114,7 @@
     <Content Include="Content\Images\admin.jpg" />
     <Content Include="Content\Images\default.png" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\sweetalert.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
