@@ -97,7 +97,7 @@ namespace Stock.UI.Controllers
         }
         #endregion
 
-        #region MyRegion
+        #region Edit
         public ActionResult Edit(int id)
         {
             var product = productService.GetProductById(id);

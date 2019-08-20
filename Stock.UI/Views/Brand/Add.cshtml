@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Brand Add";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form id="brandForm" method="post">
+                        <div class="form-body">
+                            <h3 class="box-title">Brand Add</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input type="text" name="Name" class="form-control" placeholder="Name" required>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
+                            <a href="@Url.Action("List","Brand")" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/mask.js"></script>
+    <script>
+       //Brand Add
+        $("#brandForm").on("submit", function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/Brand/Add',
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (result) {
+                    if (result == "1") {
+                        swal("Added", "Brand Added Successfully!", "success");
+                        setTimeout('direct()', 2000)
+                    }
+                    if (result == "2") {
+                        swal("Error", "Name is not null value!", "error");
+                    }
+                },
+                error: function () {
+                    swal("Hata", "An error occurred!", "error");
+                }
+            });
+        });
+
+        function direct() {
+            location.href = '/Brand/List';
+        }
+
+    </script>
+}

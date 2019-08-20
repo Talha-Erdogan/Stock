@@ -111,7 +111,6 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Icons\eliteadmin-text.png" />
     <Content Include="Content\Icons\favicon.png" />
-    <Content Include="Content\Images\admin.jpg" />
     <Content Include="Content\Images\default.png" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\sweetalert.css" />
@@ -144,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\PersonalController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
@@ -181,6 +181,9 @@
     <Content Include="Views\Product\SoldProducts.cshtml" />
     <Content Include="Views\Product\Add.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\Brand\List.cshtml" />
+    <Content Include="Views\Brand\Add.cshtml" />
+    <Content Include="Views\Brand\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

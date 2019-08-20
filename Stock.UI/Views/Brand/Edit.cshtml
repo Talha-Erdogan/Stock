@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Brand Edit";
+}
+@model Stock.Data.Brand
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                    <form id="formBrandEdit" method="post">
+                        <div class="form-body">
+                            <h3 class="box-title">Brand Edit</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label class="control-label">Ad</label>
+                                <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Ürünlerinin Adını Giriniz" required>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <input type="hidden" name="Id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Edit</button>
+                            <a href="@Url.Action("List","Brand")" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/mask.js"></script>
+
+    <script>
+        function direct() {
+            location.href = '/Brand/List';
+        }
+        //Brand Edit
+        $("#formBrandEdit").on("submit", function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/Brand/Edit',
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (result) {
+                    if (result == "1") {
+                        swal("Edit", "Brand Successfully Updated!", "success");
+                        setTimeout('direct()', 2000)
+                    }
+                    else
+                        swal("Error", "An error has occurred!", "error");
+                },
+                error: function () {
+                    swal("Error", "An error has occurred!", "error");
+                }
+            });
+        });
+
+    </script>
+}
