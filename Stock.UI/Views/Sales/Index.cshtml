@@ -1,5 +1,246 @@
 ﻿
 @{
-    
+    ViewBag.Title = "Sales";
 }
-<h1> Sales Index</h1>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="white-box">
+            <h3 class="box-title m-b-0">Make Sales</h3>
+            <div class="row" style="margin-top:30px !important;">
+                <div class="col-lg-2">
+                    <select name="selectBrand" class="form-control" style="background-color:#e4e7ea">
+                        <option>Select Brand</option>
+                        @foreach (var brand in ViewBag.Brand)
+                        {
+                            <option value="@brand.Id">@brand.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Product Name">
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <select id="select_Customer" class="form-control" style="background-color:#e4e7ea">
+                        <option value="-1">Select Customer</option>
+                        @foreach (var customer in ViewBag.Customer)
+                        {
+                            <option value="@customer.Id">@customer.Name @customer.Surname</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                    <button id="cancel_btn" class="btn btn-block btn-danger">Cancel</button>
+                </div>
+            </div>
+            <div class="table-responsive table_scrolll">
+                <table id="sales_table"></table>
+            </div>
+            <div class="row" style="margin-top:30px">
+                <div class="col-lg-8">
+                    <table id="orderTbl">
+                        <thead><tr><th>Delete</th><th>Product Name</th><th>Price</th><th>Amount</th><th>Total Amount</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="col-lg-5 col-sm-4" style="float:right;">
+                        <div class="panel">
+                            <div class="panel-heading" style="text-align:right !important;">
+                                <span id="maxAmount">Toplam Tutar : 0 TL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-1"></div>
+                <div class="col-lg-3" style="text-align:center">
+                    <button id="indirimYap" value="0" class="btn btn-default waves-effect waves-light" type="button">
+                        <span class="btn-label"><i class="fa fa-check"></i></span>
+                        İndirim Uygula
+                    </button>
+                    <span style="margin-top:15px; display:block; text-align:center; height:40px; line-height:40px; border-top: 3px solid #e4e7ea; border-bottom: 1px solid #e4e7ea" class="box-title">Satış Türünü Seçiniz</span>
+                    <button id="nakitSatis" class="btn btn-success waves-effect waves-light" type="button">
+                        <span class="btn-label"><i class="fa fa-check"></i></span>
+                        Nakit
+                    </button>
+                    <button id="veresiyeSatis" class="btn btn-success waves-effect waves-light" type="button">
+                        <span class="btn-label"><i class="fa fa-check"></i></span>
+                        Veresiye
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <link href="~/Content/Css/duzenlenen.css" rel="stylesheet" />
+    <style>
+        th, td {
+            padding: 7px !important;
+            font-weight: bold !important;
+            text-align: center !important;
+        }
+
+        th {
+            color: #fff !important;
+            background-color: #03a9f3 !important;
+        }
+
+        .table_scrolll {
+            max-height: 200px;
+            overflow: auto;
+        }
+    </style>
+    @*<script src="~/Scripts/satis.js"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Urunler();
+        });
+    </script>
+    <script>
+        //Sales List
+        function Urunler() {
+            var url = '/Sales/List';
+            $('#sales_table').html("");
+            var thead = '<thead><tr><th>Add</th><th>Brand</th><th>Product Name</th><th>Piece</th><th>Sales Price</th></tr></thead>';
+            $('#sales_table').append(thead);
+            $.getJSON(url, function (data) {
+                for (var item in data.Result) {
+                    var addButon = '<button type="button" value="' + data.Result[item].Id + '" class="btn btn-success btn-circle addToBasket"><i class="fa fa-check"></i> </button>';
+                    var user = '<tbody><tr><td style="width:40px;">' + addButon + '</td><td>' + data.Result[item].Brand + '</td><td>' + data.Result[item].Name + '</td><td>' + data.Result[item].Piece + '</td><td>' + data.Result[item].SalesPrice + ' TL</td></tr></tbody>';
+                    $('#sales_table').append(user);
+                }
+            });
+        };
+
+        //Sepete Ekle
+        $(document).on("click", ".addToBasket", function () {
+            var row = $(this).closest("tr");
+            var sutunlar = {
+                Kaldir: '<button type="button" value="' + $(this).val() + '" class="btn btn-danger btn-circle sepetSil"><i class="fa fa-times"></i> </button>',
+                UrunAdi: row.find("td:eq(2)").text(),
+                Fiyat: row.find("td:eq(4)").text().substring(0, row.find("td:eq(4)").text().length - 3),
+                Miktar: '<input type="text" class="miktar" value="1" />',
+                MaxAmount: parseFloat(row.find("td:eq(4)").text().substring(0, row.find("td:eq(4)").text().length - 3)) * parseFloat(1)
+            };
+            $("#orderTbl tbody").append("<tr><td>" + sutunlar.Kaldir + "</td><td>" + sutunlar.UrunAdi + "</td><td>" + sutunlar.Fiyat + " TL</td><td>" + sutunlar.Miktar + "</td><td>" + sutunlar.MaxAmount + " TL</td></tr>");
+            MaxAmount();
+        });
+
+        //Max Tutarı Bulma
+        $("#orderTbl").on("change", ".miktar", function () {
+            var row = $(this).closest('tr');
+            var maxAmount = row.find("td:eq(2)").text();
+            row.find("td:eq(4)").text(parseFloat(maxAmount.substring(0, maxAmount.length - 3)) * parseFloat($($(this)).val()) + " TL");
+            MaxAmount();
+        });
+
+        //Tüm Siparişlerin Toplam Tutarı
+        function MaxAmount() {
+            var maxTL = 0;
+            $("#orderTbl tbody tr").each(function () {
+                var tl = $(this).find("td:eq(4)").text();
+                maxTL += parseFloat(tl.substring(0, tl.length - 3));
+            });
+            $("#maxAmount").text("TOPLAM TUTAR : " + maxTL + " TL");
+        }
+
+
+        //Sepetten Sil
+        $("#orderTbl").on("click", ".sepetSil", function () {
+            var row = $(this).closest('tr');
+            row.fadeOut(500, function () {
+                row.remove();
+                MaxAmount();
+            });
+        });
+
+        //Sepet İptal
+        $(document).on("click", "#cancel_btn", function () {
+            var icerik = $("#orderTbl tbody tr");
+            icerik.remove();
+            MaxAmount();
+        });
+
+        //İndirim Yap
+        $(document).on("click", "#indirimYap", function () {
+            swal({
+                title: 'Kaç tl indirim yapacaksınız?',
+                confirmButtonText: 'Onayla',
+                html: '<input id="in" placeholder="örn : 10.5" class="swal2-input color">',
+                onOpen: function () {
+                    $('#in').focus()
+                }
+            }).then(function () {
+                $("#indirimYap").val($('#in').val());
+            });
+        });
+
+        //Nakit Satış Yap
+        $(document).on("click", "#nakitSatis", function () {
+            var data = [];
+            var indirim = $('#indirimYap').val();
+            var musID = $('#select_Customer').val();
+            var tr = 0;
+            var tutar = parseFloat($("#maxAmount").text().substring(14, $("#maxAmount").text().length - 3)) - parseFloat($("#indirimYap").val());
+            $("#orderTbl tbody tr").each(function () {
+                data[tr] = new Array(2);
+                data[tr][0] = $(this).find("td:eq(0) .sepetSil").val();
+                data[tr][1] = $(this).find("td:eq(3) .miktar").val();
+                tr++;
+            });
+            $.ajax({
+                type: "POST",
+                url: '/Sales/Sell',
+                data: { data: data, discount: indirim, customerId: musID },
+                dataType: "json",
+                success: function (gelenDeg) {
+                    if (gelenDeg == "1") {
+                        swal("Başarılı", "Ödenen Tutar : " + tutar + " TL", "success");
+                    }
+                     if (gelenDeg == "2") {
+                        swal("Error", "Select Customer!", "error");
+                    }
+                },
+                error: function () {
+                    swal("Hata", "Satış yapılırken hata verdi!", "error");
+                }
+            });
+        });
+
+        //Veresiye Satış Yap
+        $(document).on("click", "#veresiyeSatis", function () {
+            var data = [];
+            var tr = 0;
+            var indirim = $('#indirimYap').val();
+            var musID = $('#select_Customer').val();
+            var borc = parseFloat($("#maxAmount").text().substring(14, $("#maxAmount").text().length - 3)) - parseFloat($("#indirimYap").val());
+            $("#orderTbl tbody tr").each(function () {
+                data[tr] = new Array(2);
+                data[tr][0] = $(this).find("td:eq(0) .sepetSil").val();
+                data[tr][1] = $(this).find("td:eq(3) .miktar").val();
+                tr++;
+            });
+            $.ajax({
+                type: "POST",
+                url: '/Sales/Debt',
+                data: { data: data, discount: indirim, customerId: musID, debt: borc },
+                dataType: "json",
+                success: function (gelenDeg) {
+                    if (gelenDeg == "1") {
+                        swal("Başarılı", "Borcu : " + borc + " TL", "success");
+                    }
+                    if (gelenDeg == "2") {
+                        swal("Error", "Select Customer!", "error");
+                    }
+                },
+                error: function () {
+                    swal("Hata", "Satış yapılırken hata verdi!", "error");
+                }
+            });
+        });
+
+    </script>
+}
+
