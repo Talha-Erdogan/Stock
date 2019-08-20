@@ -15,6 +15,7 @@ namespace Stock.UI.Controllers
         #region Private Member
         private readonly ProductService productService;
         private readonly BrandService brandService;
+        private readonly SalesService salesService;
         #endregion
 
         #region Constructor
@@ -22,6 +23,7 @@ namespace Stock.UI.Controllers
         {
             productService = new ProductService();
             brandService = new BrandService();
+            salesService = new SalesService();
         }
         #endregion
 
@@ -62,7 +64,7 @@ namespace Stock.UI.Controllers
         [HttpPost]
         public JsonResult Add(Product model)
         {
-            if (model.BrandId==0)
+            if (model.BrandId == 0)
             {
                 return Json("3");
             }
@@ -129,10 +131,36 @@ namespace Stock.UI.Controllers
         }
         #endregion
 
-        //public ActionResult SoldProducts()
-        //{
-        //    return View();
-        //}
+        #region SoldProducts
+        public ActionResult SoldProducts()
+        {
+            return View();
+        }
+
+        public JsonResult SoldProductsList()
+        {
+            return this.Json(
+            new
+            {
+                Result = (from s in salesService.GetAll()
+                          join p in productService.GetAll() on s.ProductId equals p.Id
+                          join b in brandService.GetAll() on p.BrandId equals b.Id
+
+                          select new
+                          {
+                              Brand = b.Name,
+                              Name = p.Name,
+                              Piece = s.Piece,
+                              BuyingPrice = p.BuyingPrice,
+                              Kdv = p.Kdv,
+                              SalesPrice = p.SalesPrice,
+                              CreateDate = p.CreateDate,
+                              Total = (s.Piece * p.SalesPrice) - s.Discount
+                          })
+            }, JsonRequestBehavior.AllowGet
+            );
+        }
+        #endregion
 
     }
 }
