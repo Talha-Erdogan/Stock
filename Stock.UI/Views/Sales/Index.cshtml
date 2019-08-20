@@ -8,7 +8,7 @@
         <div class="white-box">
             <h3 class="box-title m-b-0">Make Sales</h3>
             <div class="row" style="margin-top:30px !important;">
-                <div class="col-lg-2">
+                @*<div class="col-lg-2">
                     <select name="selectBrand" class="form-control" style="background-color:#e4e7ea">
                         <option>Select Brand</option>
                         @foreach (var brand in ViewBag.Brand)
@@ -21,8 +21,8 @@
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Product Name">
                     </div>
-                </div>
-                <div class="col-lg-5">
+                </div>*@
+                <div class="col-lg-10" style="margin-bottom:2px;">
                     <select id="select_Customer" class="form-control" style="background-color:#e4e7ea">
                         <option value="-1">Select Customer</option>
                         @foreach (var customer in ViewBag.Customer)
@@ -47,25 +47,25 @@
                     <div class="col-lg-5 col-sm-4" style="float:right;">
                         <div class="panel">
                             <div class="panel-heading" style="text-align:right !important;">
-                                <span id="maxAmount">Toplam Tutar : 0 TL</span>
+                                <span id="maxAmount">Total Amount : 0 TL</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-1"></div>
                 <div class="col-lg-3" style="text-align:center">
-                    <button id="indirimYap" value="0" class="btn btn-default waves-effect waves-light" type="button">
-                        <span class="btn-label"><i class="fa fa-check"></i></span>
-                        İndirim Uygula
+                    <button id="discount" value="0" class="btn btn-default waves-effect waves-light " type="button">
+                        <span class="btn-label"><i class=" glyphicon glyphicon-download"></i></span>
+                        Discount
                     </button>
-                    <span style="margin-top:15px; display:block; text-align:center; height:40px; line-height:40px; border-top: 3px solid #e4e7ea; border-bottom: 1px solid #e4e7ea" class="box-title">Satış Türünü Seçiniz</span>
-                    <button id="nakitSatis" class="btn btn-success waves-effect waves-light" type="button">
-                        <span class="btn-label"><i class="fa fa-check"></i></span>
-                        Nakit
+                    <span style="margin-top:15px; display:block; text-align:center; height:40px; line-height:40px; border-top: 3px solid #e4e7ea; border-bottom: 1px solid #e4e7ea" class="box-title">Sales Type</span>
+                    <button id="cashSales" class="btn btn-success waves-effect waves-light" type="button">
+                        <span class="btn-label"><i class="	glyphicon glyphicon-euro"></i></span>
+                        Cash
                     </button>
-                    <button id="veresiyeSatis" class="btn btn-success waves-effect waves-light" type="button">
-                        <span class="btn-label"><i class="fa fa-check"></i></span>
-                        Veresiye
+                    <button id="debtSales" class="btn btn-success waves-effect waves-light" type="button">
+                        <span class="btn-label"><i class="glyphicon glyphicon-book"></i></span>
+                        Debt
                     </button>
                 </div>
             </div>
@@ -95,19 +95,19 @@
     @*<script src="~/Scripts/satis.js"></script>*@
     <script type="text/javascript">
         $(document).ready(function () {
-            Urunler();
+            Products();
         });
     </script>
     <script>
         //Sales List
-        function Urunler() {
+        function Products() {
             var url = '/Sales/List';
             $('#sales_table').html("");
             var thead = '<thead><tr><th>Add</th><th>Brand</th><th>Product Name</th><th>Piece</th><th>Sales Price</th></tr></thead>';
             $('#sales_table').append(thead);
             $.getJSON(url, function (data) {
                 for (var item in data.Result) {
-                    var addButon = '<button type="button" value="' + data.Result[item].Id + '" class="btn btn-success btn-circle addToBasket"><i class="fa fa-check"></i> </button>';
+                    var addButon = '<button type="button" value="' + data.Result[item].Id + '" class="btn btn-success btn-circle  addToBasket"><i class="glyphicon glyphicon-plus"></i> </button>';
                     var user = '<tbody><tr><td style="width:40px;">' + addButon + '</td><td>' + data.Result[item].Brand + '</td><td>' + data.Result[item].Name + '</td><td>' + data.Result[item].Piece + '</td><td>' + data.Result[item].SalesPrice + ' TL</td></tr></tbody>';
                     $('#sales_table').append(user);
                 }
@@ -118,7 +118,7 @@
         $(document).on("click", ".addToBasket", function () {
             var row = $(this).closest("tr");
             var sutunlar = {
-                Kaldir: '<button type="button" value="' + $(this).val() + '" class="btn btn-danger btn-circle sepetSil"><i class="fa fa-times"></i> </button>',
+                Kaldir: '<button type="button" value="' + $(this).val() + '" class="btn btn-danger btn-circle  sepetSil"><i class="glyphicon glyphicon-minus"></i> </button>',
                 UrunAdi: row.find("td:eq(2)").text(),
                 Fiyat: row.find("td:eq(4)").text().substring(0, row.find("td:eq(4)").text().length - 3),
                 Miktar: '<input type="text" class="miktar" value="1" />',
@@ -164,7 +164,7 @@
         });
 
         //İndirim Yap
-        $(document).on("click", "#indirimYap", function () {
+        $(document).on("click", "#discount", function () {
             swal({
                 title: 'Kaç tl indirim yapacaksınız?',
                 confirmButtonText: 'Onayla',
@@ -173,17 +173,17 @@
                     $('#in').focus()
                 }
             }).then(function () {
-                $("#indirimYap").val($('#in').val());
+                $("#discount").val($('#in').val());
             });
         });
 
         //Nakit Satış Yap
-        $(document).on("click", "#nakitSatis", function () {
+        $(document).on("click", "#cashSales", function () {
             var data = [];
-            var indirim = $('#indirimYap').val();
+            var indirim = $('#discount').val();
             var musID = $('#select_Customer').val();
             var tr = 0;
-            var tutar = parseFloat($("#maxAmount").text().substring(14, $("#maxAmount").text().length - 3)) - parseFloat($("#indirimYap").val());
+            var tutar = parseFloat($("#maxAmount").text().substring(14, $("#maxAmount").text().length - 3)) - parseFloat($("#discount").val());
             $("#orderTbl tbody tr").each(function () {
                 data[tr] = new Array(2);
                 data[tr][0] = $(this).find("td:eq(0) .sepetSil").val();
@@ -210,12 +210,12 @@
         });
 
         //Veresiye Satış Yap
-        $(document).on("click", "#veresiyeSatis", function () {
+        $(document).on("click", "#debtSales", function () {
             var data = [];
             var tr = 0;
-            var indirim = $('#indirimYap').val();
+            var indirim = $('#discount').val();
             var musID = $('#select_Customer').val();
-            var borc = parseFloat($("#maxAmount").text().substring(14, $("#maxAmount").text().length - 3)) - parseFloat($("#indirimYap").val());
+            var borc = parseFloat($("#maxAmount").text().substring(14, $("#maxAmount").text().length - 3)) - parseFloat($("#discount").val());
             $("#orderTbl tbody tr").each(function () {
                 data[tr] = new Array(2);
                 data[tr][0] = $(this).find("td:eq(0) .sepetSil").val();
