@@ -1,50 +1,53 @@
 ﻿
 @{
-    ViewBag.Title = "Personal Add";
+    ViewBag.Title = "Personal Edit";
 }
+
+@model Stock.Data.Personal
 
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-info">
             <div class="panel-wrapper collapse in" aria-expanded="true">
                 <div class="panel-body">
-                    <form id="veri" method="post">
+                    <form id="formPersonalEdit" method="post">
                         <div class="form-body">
-                            <h3 class="box-title">Personal Add</h3>
+                            <h3 class="box-title">Personal Edit</h3>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-6 ol-md-6 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">Name</label>
-                                        <input type="text" name="Name" class="form-control" placeholder="Name">
+                                        <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Name">
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Surname</label>
-                                        <input type="text" name="Surname" class="form-control" placeholder="Surname">
+                                        <input type="text" name="Surname" value="@Model.Surname" class="form-control" placeholder="Surname">
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Phone</label>
-                                        <input type="text" name="Phone" class="form-control" placeholder="0(999) 999-9999" maxlength="11">
+                                        <input type="text" name="Phone" value="@Model.Phone" class="form-control" placeholder="0(999) 999-9999" maxlength="11">
                                     </div>
                                 </div>
                                 <div class="col-sm-6 ol-md-6 col-xs-12">
                                     <div class="white-box" style="padding-top:0px !important">
                                         <h3 style="margin-bottom:9px !important" class="box-title">Upload Photo</h3>
-                                        <input type="file" name="Image" id="input-file-now-custom-1" class="dropify" data-default-file="/Content/Images/default.png" />
+                                        <input type="file" name="Image" id="input-file-now-custom-1" class="dropify" data-default-file="@Model.Image" />
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Address</label>
-                                <input type="text" name="Address" class="form-control" placeholder="Address">
+                                <input type="text" name="Address" value="@Model.Address" class="form-control" placeholder="Address">
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Salary</label>
-                                <input type="number" name="Salary" class="form-control" placeholder="Salary">
+                                <input type="number" name="Salary" value="@Model.Salary" class="form-control" placeholder="Salary">
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
+                            <input type="hidden" name="ID" value="@Model.Id" />
+                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Update</button>
                             <a href="@Url.Action("Index","Personal")" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
@@ -58,12 +61,50 @@
     <script src="~/Scripts/mask.js"></script>
     <link href="~/Content/Css/dropify.min.css" rel="stylesheet" />
     <script src="~/Scripts/dropify.min.js"></script>
+    @*<script src="~/Scripts/personel.js"></script>*@
     <script type="text/javascript">
         $(document).ready(function () {
             // Basic
             $('.dropify').dropify();
+
+            // Translated
+            //$('.dropify-fr').dropify({
+            //    messages: {
+            //        default: 'Glissez-déposez un fichier ici ou cliquez',
+            //        replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+            //        remove: 'Supprimer',
+            //        error: 'Désolé, le fichier trop volumineux'
+            //    }
+            //});
+
+            // Used events
+            //var drEvent = $('#input-file-events').dropify();
+
+            //drEvent.on('dropify.beforeClear', function (event, element) {
+            //    return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+            //});
+
+            //drEvent.on('dropify.afterClear', function (event, element) {
+            //    alert('File deleted');
+            //});
+
+            //drEvent.on('dropify.errors', function (event, element) {
+            //    console.log('Has Errors');
+            //});
+
+            //var drDestroy = $('#input-file-to-destroy').dropify();
+            //drDestroy = drDestroy.data('dropify')
+            //$('#toggleDropify').on('click', function (e) {
+            //    e.preventDefault();
+            //    if (drDestroy.isDropified()) {
+            //        drDestroy.destroy();
+            //    } else {
+            //        drDestroy.init();
+            //    }
+            //})
         });
     </script>
+
     <script>
         //Personal Image Add
         $("#input-file-now-custom-1").change(function () {
@@ -92,31 +133,32 @@
             });
         });
 
-        //Personal Add
-        $("#veri").on("submit", function (event) {
+        //Personal page direct
+        function direct() {
+            location.href = '/Personal/Index';
+        }
+
+        //Personal Edit
+        $("#formPersonalEdit").on("submit", function (event) {
             event.preventDefault();
             $.ajax({
                 type: "POST",
-                url: '/Personal/Add',
+                url: '/Personal/Edit',
                 data: $(this).serialize(),
                 dataType: "json",
                 success: function (result) {
                     if (result == "1") {
-                        swal("Added", "Personal Added Successfully!", "success");
+                        swal("Edited", "Personal Successfully Updated!", "success");
                         setTimeout('direct()', 2000)
                     }
                     else
-                        swal("Error", "An error occurred!", "error");
+                        swal("Error", "An error has occurred!", "error");
                 },
                 error: function () {
-                    swal("Error", "An error occurred!", "error");
+                    swal("Error", "An error has occurred!", "error");
                 }
             });
         });
 
-        //Personal Page Direct
-        function direct() {
-            location.href = '/Personal/Index';
-        }
     </script>
 }

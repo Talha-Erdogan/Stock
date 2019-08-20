@@ -55,7 +55,6 @@ namespace Stock.UI.Controllers
         }
         #endregion
 
-
         #region Add
         public ActionResult Add()
         {
@@ -123,6 +122,52 @@ namespace Stock.UI.Controllers
                     personalService.Delete(personalId);
                 }
                 return Json("1");
+            }
+            catch { return Json("0"); }
+        }
+        #endregion
+
+        #region Edit
+        public ActionResult Edit(int id)
+        {
+            var prsnl = personalService.GetPersonalById(id);
+            return View(prsnl);
+        }
+
+        [HttpPost]
+        public JsonResult Edit(Personal model)
+        {
+            try
+            {
+                var personal = personalService.GetPersonalById(model.Id);
+                if (personal!=null)
+                {
+                    HttpPostedFile image = (HttpPostedFile)Session["image"];
+                    if (image == null && personal.Image != "/Content/Images/default.png")
+                        personal.Image = personal.Image;
+                    else if (image == null)
+                        personal.Image = "/Content/Images/default.png";
+                    else
+                    {
+                        var path = Path.Combine(Server.MapPath("~/Content/Images/") + image.FileName);
+                        image.SaveAs(path);
+                        personal.Image = "/Content/Images/" + image.FileName;
+                    }
+                    personal.Name = model.Name;
+                    personal.Surname = model.Surname;
+                    personal.Phone = model.Phone;
+                    personal.Address = model.Address;
+                    personal.Salary = model.Salary;
+
+                    personalService.Update(personal);
+                    Session.Remove("image");
+                    return Json("1");
+                }
+                else
+                {
+                    return Json("0");
+                }
+               
             }
             catch { return Json("0"); }
         }
