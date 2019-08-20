@@ -17,8 +17,10 @@ namespace Stock.UI.Helper
             else
             {
                 string controllerName = filterContext.RouteData.Values["controller"].ToString();
-                if (cookie["Authority"] == "Personal" && controllerName == "Admin")
+                if (cookie["AuthorityName"] == "Personal" && controllerName == "Admin")
+                { 
                     filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Sales" }, { "action", "Index" } });
+                }
             }
             base.OnActionExecuting(filterContext);
         }

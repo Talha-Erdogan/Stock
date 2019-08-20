@@ -49,7 +49,7 @@ namespace Stock.UI.Controllers
                         loginUser.Values.Add("Surname", userInformation.Surname);
                         loginUser.Values.Add("Image", userInformation.Image);
                         loginUser.Values.Add("EntryDate", userInformation.EntryDate.ToString());
-                        loginUser.Values.Add("Yetki", userInformation.AuthorityName);
+                        loginUser.Values.Add("AuthorityName", userInformation.AuthorityName);
                         if (rememberMe)
                             loginUser.Expires = DateTime.Now.AddDays(365);
                         Response.Cookies.Add(loginUser);

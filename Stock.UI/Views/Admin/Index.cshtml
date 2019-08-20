@@ -1,5 +1,160 @@
 ﻿
 @{
-    
+    ViewBag.Title = "Admin Page";
 }
-<h1> Admin Index</h1>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="white-box">
+            <h3 class="box-title m-b-0">Admin Page</h3>
+            <p class="text-muted m-b-30">
+                <div class="row">
+                    <div class="col-lg-1 col-md-1 col-sm-2 col-xs-5">
+                        <button id="deleteBtn" class="btn btn-block btn-info">Delete</button>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-7">
+                        <a href="@Url.Action("UserAdd","Admin")" class="btn btn-block btn-info">User Add</a>
+                    </div>
+                </div>
+            </p>
+            <div class="table-responsive">
+                <table id="adminTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <link href="~/Content/Css/duzenlenen.css" rel="stylesheet" />
+    @*<script src="~/Scripts/uyeYonetim.js"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Personeller();
+        });
+    </script>
+    <script>
+        //User List
+        function Personeller() {
+            var url = '/Admin/List';
+            $('#adminTable').html("");
+            var thead = '<thead><tr><th>Select</th><th>Image</th><th>Name Surname</th><th>UserName</th><th>Authority</th></tr></thead>';
+            $('#adminTable').append(thead);
+            $.getJSON(url, function (data) {
+                for (var item in data.Result) {
+                    var checkbox = '<input type="checkbox" name="selectedd" value=' + data.Result[item].Id + ' />';
+                    var authority = '<button id="authority" value="' + data.Result[item].Id + '" class="btn btn-block btn-danger">' + data.Result[item].Authority + '</button>';
+                    var user = '<tbody><tr><td>' + checkbox + '</td><td width="50" height="50""><img style="width:100%; height:auto;" src="' + data.Result[item].Image + '" alt="" /></td><td>' + data.Result[item].Name + ' ' + data.Result[item].Surname + '</td><td>' + data.Result[item].UserName + '</td><td>' + authority + '</td></tr></tbody>';
+                    $('#adminTable').append(user);
+                }
+                //var tfoot = '<tfoot><tr><th>Seç</th><th>Resim</th><th>Ad Soyad</th><th>Kullanıcı Adı</th><th>authority</th></tr></tfoot>';
+                //$('#adminTable').append(tfoot);
+            });
+        };
+
+        //Personel hesap sayfasına yönlendir
+        function yonlendir() {
+            location.href = '/Admin/Index';
+        }
+
+        //Personel hesap ekle
+        $("#veri").on("submit", function (event) {
+            event.preventDefault();
+            var sifreTkrar = $("input[name='SifreTekrar']").val();
+            $.ajax({
+                type: "POST",
+                url: '/UyeYonetim/Ekle',
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (gelenDeg) {
+                    if (gelenDeg == "1") {
+                        swal("Eklendi", "Hesap Başarıyla Oluşturuldu!", "success");
+                        setTimeout('yonlendir()', 3000)
+                    }
+                    else if (gelenDeg == "hesabıZatenVar") {
+                        swal("Eklenmedi", "Personele ait bir hesap zaten var!", "error");
+                    }
+                    else if (gelenDeg == "sifreFarklı") {
+                        swal("Eklenmedi", "Şifreler birbirinden uyumsuz,tekrar kontrol edip deneyin!", "error");
+                    }
+                },
+                error: function () {
+                    swal("Hata", "Hesap Oluşturulurken Hata Oluştu!", "error");
+                }
+            });
+        });
+
+        //Personel Hesap Sil
+        $("#deleteBtn").click(function () {
+            var data = [];
+            var sayac = 0;
+            $("input[name='selectedd']:checked").each(function () {
+                data[sayac] = $(this).val();
+                sayac++;
+            });
+            swal({
+                title: 'Delete?',
+                text: "Are you sure?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Delete'
+            }).then(function () {
+                $.ajax({
+                    type: "POST",
+                    url: '/Admin/Delete',
+                    data: { data },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "1") {
+                            swal("Deleted", "User Delete Successfuly!", "success");
+                            Personeller();
+                        }
+                        else if (result == "2") {
+                            swal("Error!", "An error occurred!", "error");
+                        }
+                    },
+                    error: function () {
+                        swal("Error!", "An error occurred!", "error");
+                    }
+                });
+            })
+        });
+
+        //Yetki değiştir
+        $(document).on("click", "#authority", function () {
+            var prsnlID = $(this).val();
+            swal({
+                title: 'Yetkiler',
+                input: 'select',
+                inputOptions: {
+                    'Personel': 'Personel',
+                    'Admin': 'Admin'
+                },
+                inputPlaceholder: 'Yetki seçiniz',
+                showCancelButton: true
+            }).then(function (result) {
+                $.ajax({
+                    type: "POST",
+                    url: '/UyeYonetim/YetkiGuncelle',
+                    data: { yetkiAd: result, prsnlID: prsnlID },
+                    dataType: "json",
+                    success: function (gelenDeg) {
+                        if (gelenDeg == "1") {
+                            swal("Güncellendi", "Yetki başarıyla güncellendi!", "success");
+                            Personeller();
+                        }
+                        else if (gelenDeg == "0")
+                            swal("Hata!", "Yetki güncellenirken hata oluştu!", "error");
+                    },
+                    error: function () {
+                        swal("Hata!", "Yetki güncellenirken hata oluştu!", "error");
+                    }
+                });
+            })
+        });
+
+    </script>
+
+}
+

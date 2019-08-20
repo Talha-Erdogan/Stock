@@ -186,6 +186,7 @@
     <Content Include="Views\Brand\Edit.cshtml" />
     <Content Include="Views\Personal\Add.cshtml" />
     <Content Include="Views\Personal\Edit.cshtml" />
+    <Content Include="Views\Admin\UserAdd.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
