@@ -99,9 +99,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Css\animate.css" />
+    <Content Include="Content\Css\appStyle.css" />
     <Content Include="Content\Css\blue.css" />
     <Content Include="Content\Css\dropify.min.css" />
-    <Content Include="Content\Css\duzenlenen.css" />
     <Content Include="Content\Css\sidebar-nav.min.css" />
     <Content Include="Content\Css\spinners.css" />
     <Content Include="Content\Css\style.css" />
@@ -128,16 +128,10 @@
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.slimscroll.js" />
     <Content Include="Scripts\jQuery.style.switcher.js" />
-    <Content Include="Scripts\login.js" />
     <Content Include="Scripts\mask.js" />
-    <Content Include="Scripts\musteri.js" />
-    <Content Include="Scripts\personel.js" />
-    <Content Include="Scripts\satis.js" />
     <Content Include="Scripts\sidebar-nav.min.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Scripts\sweetalert2.min.js" />
-    <Content Include="Scripts\urun.js" />
-    <Content Include="Scripts\uyeYonetim.js" />
     <Content Include="Scripts\waves.js" />
     <Content Include="Web.config" />
   </ItemGroup>
