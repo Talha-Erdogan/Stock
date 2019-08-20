@@ -26,15 +26,14 @@
 
 @section scripts{
     <link href="~/Content/Css/duzenlenen.css" rel="stylesheet" />
-    @*<script src="~/Scripts/uyeYonetim.js"></script>*@
     <script type="text/javascript">
         $(document).ready(function () {
-            Personeller();
+            Users();
         });
     </script>
     <script>
         //User List
-        function Personeller() {
+        function Users() {
             var url = '/Admin/List';
             $('#adminTable').html("");
             var thead = '<thead><tr><th>Select</th><th>Image</th><th>Name Surname</th><th>UserName</th><th>Authority</th></tr></thead>';
@@ -46,44 +45,15 @@
                     var user = '<tbody><tr><td>' + checkbox + '</td><td width="50" height="50""><img style="width:100%; height:auto;" src="' + data.Result[item].Image + '" alt="" /></td><td>' + data.Result[item].Name + ' ' + data.Result[item].Surname + '</td><td>' + data.Result[item].UserName + '</td><td>' + authority + '</td></tr></tbody>';
                     $('#adminTable').append(user);
                 }
-                //var tfoot = '<tfoot><tr><th>Seç</th><th>Resim</th><th>Ad Soyad</th><th>Kullanıcı Adı</th><th>authority</th></tr></tfoot>';
-                //$('#adminTable').append(tfoot);
             });
         };
 
-        //Personel hesap sayfasına yönlendir
-        function yonlendir() {
+        //Admin page redirect
+        function redirect() {
             location.href = '/Admin/Index';
         }
 
-        //Personel hesap ekle
-        //$("#veri").on("submit", function (event) {
-        //    event.preventDefault();
-        //    var sifreTkrar = $("input[name='SifreTekrar']").val();
-        //    $.ajax({
-        //        type: "POST",
-        //        url: '/UyeYonetim/Ekle',
-        //        data: $(this).serialize(),
-        //        dataType: "json",
-        //        success: function (gelenDeg) {
-        //            if (gelenDeg == "1") {
-        //                swal("Eklendi", "Hesap Başarıyla Oluşturuldu!", "success");
-        //                setTimeout('yonlendir()', 3000)
-        //            }
-        //            else if (gelenDeg == "hesabıZatenVar") {
-        //                swal("Eklenmedi", "Personele ait bir hesap zaten var!", "error");
-        //            }
-        //            else if (gelenDeg == "sifreFarklı") {
-        //                swal("Eklenmedi", "Şifreler birbirinden uyumsuz,tekrar kontrol edip deneyin!", "error");
-        //            }
-        //        },
-        //        error: function () {
-        //            swal("Hata", "Hesap Oluşturulurken Hata Oluştu!", "error");
-        //        }
-        //    });
-        //});
-
-        //Personel Hesap Sil
+        //User Delete
         $("#deleteBtn").click(function () {
             var data = [];
             var sayac = 0;
@@ -121,7 +91,7 @@
             })
         });
 
-        //Yetki değiştir
+        //User edit (Authority)
         $(document).on("click", "#authority", function () {
             var userID = $(this).val();
             swal({
