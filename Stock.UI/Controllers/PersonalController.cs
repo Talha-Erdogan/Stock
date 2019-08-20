@@ -15,12 +15,14 @@ namespace Stock.UI.Controllers
     {
         #region Private Member
         PersonalService personalService;
+        UserService userService;
         #endregion
 
         #region Constructor
         public PersonalController()
         {
             personalService = new PersonalService();
+            userService = new UserService();
         }
         #endregion
 
@@ -92,6 +94,34 @@ namespace Stock.UI.Controllers
                     personalService.Add(model);
                 }
                 Session.Remove("image");
+                return Json("1");
+            }
+            catch { return Json("0"); }
+        }
+        #endregion
+
+        #region Delete
+        [HttpPost]
+        public JsonResult Delete(int[] data)
+        {
+            try
+            {
+                if (data == null) return Json("2");
+                foreach (var personalId in data)
+                {
+                    var prsnl = personalService.GetPersonalById(personalId);
+                    if (System.IO.File.Exists(Server.MapPath(prsnl.Image)))
+                    {
+                        if (prsnl.Image != "/Content/Images/default.png")
+                            System.IO.File.Delete(Server.MapPath(prsnl.Image));
+                    }
+                    var user = userService.GetUserByPersonalId(personalId);
+                    if (user!=null)
+                    {
+                        userService.Delete(user.Id);
+                    }
+                    personalService.Delete(personalId);
+                }
                 return Json("1");
             }
             catch { return Json("0"); }

@@ -57,6 +57,14 @@ namespace Stock.Business
             }
         }
 
+        public User GetUserByPersonalId(int personalId)
+        {
+            using (AppDbContext db = new AppDbContext())
+            {
+                return db.User.Where(p => p.PersonalId == personalId).FirstOrDefault();
+            }
+        }
+
         public int Add(User user)
         {
             try

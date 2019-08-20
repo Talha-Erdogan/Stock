@@ -28,150 +28,96 @@
     <link href="~/Content/Css/duzenlenen.css" rel="stylesheet" />
     @*<script src="~/Scripts/personel.js"></script>*@
     <script type="text/javascript">
-    $(document).ready(function () {
-        Personeller();
-    });
+        $(document).ready(function () {
+            Personeller();
+        });
     </script>
 
     <script>
-//Personal List
-function Personeller() {
-    var url = '/Personal/List';
-    $('#personalTable').html("");
-    var thead = '<thead><tr><th>Select</th><th>Image</th><th>Name Surname</th><th>Phone</th><th>Address</th><th>Salary</th><th>Entry Date</th><th>Edit</th></tr></thead>';
-    $('#personalTable').append(thead);
-    $.getJSON(url, function (data) {
-        for (var item in data.Result) {
-            var checkbox = '<input type="checkbox" name="selectedd" value=' + data.Result[item].Id + ' />';
-            var button = '<button id="redirect" value="' + data.Result[item].Id + '" class="btn btn-block btn-info">Edit</button>';
-            var user = '<tbody><tr><td>' + checkbox + '</td><td width="50" height="50""><img style="width:100%; height:auto;" src="' + data.Result[item].Image + '" alt="" /></td><td>' + data.Result[item].Name + ' ' + data.Result[item].Surname + '</td><td>' + data.Result[item].Phone + '</td><td>' + data.Result[item].Address + '</td><td>' + data.Result[item].Salary + ' TL</td><td>' + data.Result[item].EntryDate + '</td><td>' + button + '</td></tr></tbody>';
-            $('#personalTable').append(user);
-        }
-        //var tfoot = '<tfoot><tr><th>Seç</th><th>Resim</th><th>Ad Soyad</th><th>Tel</th><th>Adres</th><th>Maaş</th><th>Giriş Tarihi</th><th>Güncelle</th></tr></tfoot>';
-        //$('#personalTable').append(tfoot);
-    });
-};
+        //Personal List
+        function Personeller() {
+            var url = '/Personal/List';
+            $('#personalTable').html("");
+            var thead = '<thead><tr><th>Select</th><th>Image</th><th>Name Surname</th><th>Phone</th><th>Address</th><th>Salary</th><th>Entry Date</th><th>Edit</th></tr></thead>';
+            $('#personalTable').append(thead);
+            $.getJSON(url, function (data) {
+                for (var item in data.Result) {
+                    var checkbox = '<input type="checkbox" name="selectedd" value=' + data.Result[item].Id + ' />';
+                    var button = '<button id="redirect" value="' + data.Result[item].Id + '" class="btn btn-block btn-info">Edit</button>';
+                    var user = '<tbody><tr><td>' + checkbox + '</td><td width="50" height="50""><img style="width:100%; height:auto;" src="' + data.Result[item].Image + '" alt="" /></td><td>' + data.Result[item].Name + ' ' + data.Result[item].Surname + '</td><td>' + data.Result[item].Phone + '</td><td>' + data.Result[item].Address + '</td><td>' + data.Result[item].Salary + ' TL</td><td>' + data.Result[item].EntryDate + '</td><td>' + button + '</td></tr></tbody>';
+                    $('#personalTable').append(user);
+                }
+                //var tfoot = '<tfoot><tr><th>Seç</th><th>Resim</th><th>Ad Soyad</th><th>Tel</th><th>Adres</th><th>Maaş</th><th>Giriş Tarihi</th><th>Güncelle</th></tr></tfoot>';
+                //$('#personalTable').append(tfoot);
+            });
+        };
 
-//Personel Resmi Ekle
-$("#input-file-now-custom-1").change(function () {
-    var veri = new FormData();
-    var resim = $(this).get(0).files;
-    if (resim.length > 0) {
-        veri.append("prsnlResim", resim[0]);
-    }
-    $.ajax({
-        type: "POST",
-        url: "/Personel/ResimYukle",
-        data: veri,
-        cashe: false,
-        contentType: false,
-        processData: false,
-        success: function (gelenDeg) {
-            if (gelenDeg == "2") {
-                swal("Hata!", "Aynı ad'a sahip bir dosya zaten var!", "error");
-            }
-        },
-        error: function (gelenDeg) {
-            if (gelenDeg == "0") {
-                swal("Hata!", "Resim eklenirken hata oluştu!", "error");
-            }
-        }
-    });
-});
+        //Personal  Delete
+        $("#deleteBtn").click(function () {
+            var data = [];
+            var sayac = 0;
+            $("input[name='selectedd']:checked").each(function () {
+                data[sayac] = $(this).val();
+                sayac++;
+            });
+            swal({
+                title: 'Deleting?',
+                text: "Are you sure?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Delete'
+            }).then(function () {
+                setTimeout(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Personal/Delete',
+                        data: { data },
+                        dataType: "json",
+                        success: function (result) {
+                            if (result == "1") {
+                                swal("Deleted", "Personal Delete Successfuly!", "success");
+                                Personeller();
+                            }
+                            else if (result == "2") {
+                                swal("Error!", "An error occurred!", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Error!", "An error occurred!", "error");
+                        }
+                    });
+                });
+            })
+        });
 
-//Personel Ekle
-$("#veri").on("submit", function (event) {
-    event.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: '/Personel/Ekle',
-        data: $(this).serialize(),
-        dataType: "json",
-        success: function (gelenDeg) {
-            if (gelenDeg == "1") {
-                swal("Eklendi", "Personel Başarıyla Eklendi!", "success");
-                setTimeout('yonlendir()', 3000)
-            }
-            else
-                swal("Hata", "Personel Eklenirken Hata Oluştu!", "error");
-        },
-        error: function () {
-            swal("Hata", "Personel Eklenirken Hata Oluştu!", "error");
-        }
-    });
-});
+        //Personal Edit Page Redirect
+        $(document).on("click", "#redirect", function () {
+            window.location.href = "/Personal/Edit/" + $(this).val();
+        });
 
-//Personel sayfasına yönlendir
-function yonlendir() {
-    location.href = '/Personel';
-}
-
-//Personel sil
-$("#deleteBtn").click(function () {
-    var data = [];
-    var sayac = 0;
-    $("input[name='selectedd']:checked").each(function () {
-        data[sayac] = $(this).val();
-        sayac++;
-    });
-    swal({
-        title: 'Personel(leri)i gerçekten silmek istiyor musunuz?',
-        text: "Personel silindiğinde hesabıda silinecek..",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sil'
-    }).then(function () {
-        setTimeout(function () {
+        //Personel Güncelle
+        $("#veriGuncelle").on("submit", function (event) {
+            event.preventDefault();
             $.ajax({
                 type: "POST",
-                url: '/Personel/Sil',
-                data: { data },
+                url: '/Personel/Guncelle',
+                data: $(this).serialize(),
                 dataType: "json",
                 success: function (gelenDeg) {
                     if (gelenDeg == "1") {
-                        swal("Silindi", "Silme işlemi başarıyla gerçekleşti!", "success");
-                        Personeller();
+                        swal("Güncellendi", "Personel Başarıyla Güncellendi!", "success");
+                        setTimeout('yonlendir()', 3000)
                     }
-                    else if (gelenDeg == "2") {
-                        swal("Hata!", "Silinecek birşey bulunamadı!", "error");
-                    }
+                    else
+                        swal("Hata", "Personel Güncellenirken Hata Oluştu!", "error");
                 },
                 error: function () {
-                    swal("Hata!", "Personel Silinirken hata oluştu!", "error");
+                    swal("Hata", "Personel Güncellenirken Hata Oluştu!", "error");
                 }
             });
         });
-    })
-});
-
-//Personal Edit Page Redirect
-$(document).on("click", "#redirect", function () {
-    window.location.href = "/Personal/Edit/" + $(this).val();
-});
-
-//Personel Güncelle
-$("#veriGuncelle").on("submit", function (event) {
-    event.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: '/Personel/Guncelle',
-        data: $(this).serialize(),
-        dataType: "json",
-        success: function (gelenDeg) {
-            if (gelenDeg == "1") {
-                swal("Güncellendi", "Personel Başarıyla Güncellendi!", "success");
-                setTimeout('yonlendir()', 3000)
-            }
-            else
-                swal("Hata", "Personel Güncellenirken Hata Oluştu!", "error");
-        },
-        error: function () {
-            swal("Hata", "Personel Güncellenirken Hata Oluştu!", "error");
-        }
-    });
-});
     </script>
 }
 
