@@ -57,31 +57,31 @@
         }
 
         //Personel hesap ekle
-        $("#veri").on("submit", function (event) {
-            event.preventDefault();
-            var sifreTkrar = $("input[name='SifreTekrar']").val();
-            $.ajax({
-                type: "POST",
-                url: '/UyeYonetim/Ekle',
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function (gelenDeg) {
-                    if (gelenDeg == "1") {
-                        swal("Eklendi", "Hesap Başarıyla Oluşturuldu!", "success");
-                        setTimeout('yonlendir()', 3000)
-                    }
-                    else if (gelenDeg == "hesabıZatenVar") {
-                        swal("Eklenmedi", "Personele ait bir hesap zaten var!", "error");
-                    }
-                    else if (gelenDeg == "sifreFarklı") {
-                        swal("Eklenmedi", "Şifreler birbirinden uyumsuz,tekrar kontrol edip deneyin!", "error");
-                    }
-                },
-                error: function () {
-                    swal("Hata", "Hesap Oluşturulurken Hata Oluştu!", "error");
-                }
-            });
-        });
+        //$("#veri").on("submit", function (event) {
+        //    event.preventDefault();
+        //    var sifreTkrar = $("input[name='SifreTekrar']").val();
+        //    $.ajax({
+        //        type: "POST",
+        //        url: '/UyeYonetim/Ekle',
+        //        data: $(this).serialize(),
+        //        dataType: "json",
+        //        success: function (gelenDeg) {
+        //            if (gelenDeg == "1") {
+        //                swal("Eklendi", "Hesap Başarıyla Oluşturuldu!", "success");
+        //                setTimeout('yonlendir()', 3000)
+        //            }
+        //            else if (gelenDeg == "hesabıZatenVar") {
+        //                swal("Eklenmedi", "Personele ait bir hesap zaten var!", "error");
+        //            }
+        //            else if (gelenDeg == "sifreFarklı") {
+        //                swal("Eklenmedi", "Şifreler birbirinden uyumsuz,tekrar kontrol edip deneyin!", "error");
+        //            }
+        //        },
+        //        error: function () {
+        //            swal("Hata", "Hesap Oluşturulurken Hata Oluştu!", "error");
+        //        }
+        //    });
+        //});
 
         //Personel Hesap Sil
         $("#deleteBtn").click(function () {
@@ -123,32 +123,33 @@
 
         //Yetki değiştir
         $(document).on("click", "#authority", function () {
-            var prsnlID = $(this).val();
+            var userID = $(this).val();
             swal({
-                title: 'Yetkiler',
+                title: 'Authorities',
                 input: 'select',
                 inputOptions: {
-                    'Personel': 'Personel',
+                    'Personal': 'Personal',
                     'Admin': 'Admin'
                 },
-                inputPlaceholder: 'Yetki seçiniz',
+                inputPlaceholder: 'Authority - Select',
+                inputStyle:'control-label',
                 showCancelButton: true
             }).then(function (result) {
                 $.ajax({
                     type: "POST",
-                    url: '/UyeYonetim/YetkiGuncelle',
-                    data: { yetkiAd: result, prsnlID: prsnlID },
+                    url: '/Admin/Edit',
+                    data: { authorityName: result, userId: userID },
                     dataType: "json",
-                    success: function (gelenDeg) {
-                        if (gelenDeg == "1") {
-                            swal("Güncellendi", "Yetki başarıyla güncellendi!", "success");
+                    success: function (resultt) {
+                        if (resultt == "1") {
+                            swal("Updated", "Update is susccessfuly!", "success");
                             Personeller();
                         }
-                        else if (gelenDeg == "0")
-                            swal("Hata!", "Yetki güncellenirken hata oluştu!", "error");
+                        else if (resultt == "0")
+                            swal("Error!", "An error occured!", "error");
                     },
                     error: function () {
-                        swal("Hata!", "Yetki güncellenirken hata oluştu!", "error");
+                        swal("Error!", "An error occured!", "error");
                     }
                 });
             })

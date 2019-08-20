@@ -117,5 +117,30 @@ namespace Stock.UI.Controllers
         }
         #endregion
 
+        #region Edit
+        [HttpPost]
+        public JsonResult Edit(int userId, string authorityName)
+        {
+            try
+            {
+                var user = userService.GetUserById(userId);
+                if (authorityName=="Admin")
+                {
+                    user.AuthorityId = 1;
+                    userService.Update(user);
+                    return Json("1");
+                }
+                else if(authorityName == "Personal")
+                {
+                    user.AuthorityId = 2;
+                    userService.Update(user);
+                    return Json("1");
+                }
+                return Json("0");
+            }
+            catch { return Json("0"); }
+        }
+        #endregion
+
     }
 }
